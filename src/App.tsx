@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Route } from "react-router-dom";
+import AuthRoute from "./components/navigation/authroute";
+import { Dashboard, Login, Account, Placements } from "./views";
+import { AuthRoutes, NonAuthRoutes, userRoles } from "./data/enums";
+import { Container, useTheme } from '@material-ui/core';
 
 function App() {
+  const theme = useTheme();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ backgroundColor: theme.palette.background.default }}>
+      <Container>
+        <Switch>
+          <Route exact path={NonAuthRoutes.login} component={Login} />
+          <AuthRoute path={AuthRoutes.account} requiredRoles={[...userRoles.all]} Component={Account} />
+          <AuthRoute path={AuthRoutes.dashboard} requiredRoles={[...userRoles.all]} Component={Dashboard} />
+          <AuthRoute path={AuthRoutes.placements} requiredRoles={[...userRoles.users]} Component={Placements} />
+          <Route path={NonAuthRoutes.unauthorized} />
+        </Switch>
+      </Container>
     </div>
   );
-}
+};
 
 export default App;
