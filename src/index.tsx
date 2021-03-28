@@ -5,21 +5,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
-import { lightBlue } from '@material-ui/core/colors';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
+import { grey, lightBlue } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: lightBlue[400]
-    }
+      main: lightBlue[400],
+      contrastText: "#fff"
+    },
+    secondary: {
+      main: "#fff",
+      contrastText: grey[800]
+    },
   }
 })
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={responsiveFontSizes(theme)}>
         <App />
       </ThemeProvider>
     </BrowserRouter>

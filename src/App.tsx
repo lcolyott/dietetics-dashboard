@@ -1,23 +1,23 @@
 import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import AuthRoute from "./components/navigation/authroute";
-import { Dashboard, Login, Account, Placements } from "./views";
-import { AuthRoutes, NonAuthRoutes, userRoles } from "./data/enums";
+import { userRoles, routes } from "./data/authorization";
 import { Container, useTheme } from '@material-ui/core';
+import AppLayout from './components/layout';
 
 function App() {
   const theme = useTheme();
   return (
     <div style={{ backgroundColor: theme.palette.background.default }}>
-      <Container>
-        <Switch>
-          <Route exact path={NonAuthRoutes.login} component={Login} />
-          <AuthRoute path={AuthRoutes.account} requiredRoles={[...userRoles.all]} Component={Account} />
-          <AuthRoute path={AuthRoutes.dashboard} requiredRoles={[...userRoles.all]} Component={Dashboard} />
-          <AuthRoute path={AuthRoutes.placements} requiredRoles={[...userRoles.users]} Component={Placements} />
-          <Route path={NonAuthRoutes.unauthorized} />
-        </Switch>
-      </Container>
+      <Switch>
+        <Route path={routes.unauthorizedRoutes["unauthorized"].path} component={routes.unauthorizedRoutes["unauthorized"].component} />
+        <Route exact path={routes.unauthorizedRoutes["login"].path} component={routes.unauthorizedRoutes["login"].component} />
+        <AppLayout>
+          {Object.entries(routes.authorizedRoutes).map((entry, index) => (
+            <AuthRoute key={index} path={entry[1].path} Component={entry[1].component} requiredRoles={entry[1].authorizedRoles ?? userRoles.admins} />
+          ))}
+        </AppLayout>
+      </Switch>
     </div>
   );
 };

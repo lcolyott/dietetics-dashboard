@@ -1,10 +1,11 @@
 import React from "react";
 import { Button, createStyles, Divider, Grid, makeStyles, Paper, Theme, Typography, useTheme, withStyles } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { StyledTextField } from "../../components/input";
+import { isJSDocCommentContainingNode } from "typescript";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -86,42 +87,23 @@ const RoleButton = withStyles((theme: Theme) => createStyles({
     },
 }))(ToggleButton);
 
-const NewAccount = () => {
+interface NewAccountProps {
+    onCreateAccountClicked: () => void;
+    onSignInClicked: () => void;
+}
+
+const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
+    const { onCreateAccountClicked, onSignInClicked } = props;
+    const [userRole, setUserRole] = React.useState<"student" | "preceptor">("student");
+
     const theme = useTheme();
     const classes = useStyles(theme);
-    const [userRole, setUserRole] = React.useState<"student" | "preceptor">("student");
 
     const handleSetUserRole = (value: "student" | "preceptor" | undefined) => {
         if (value) {
             setUserRole(value);
         }
     }
-
-    const StudentInput = () => {
-        return (
-            <React.Fragment>
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Email"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Retype Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"First Name"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Last Name"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
-            </React.Fragment>
-        );
-    };
-
-    const PreceptorInput = () => {
-        return (
-            <React.Fragment>
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Email"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Retype Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"First Name"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Last Name"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
-            </React.Fragment>
-        );
-    };
 
     return (
         <React.Fragment>
@@ -143,44 +125,91 @@ const NewAccount = () => {
                 </RoleToggle>
             </Grid>
             <Grid item container justify={"center"} direction={"column"}>
-                {userRole == 'student' ? (<StudentInput />) : (<PreceptorInput />)}
+                <StyledTextField variant={"outlined"} margin={"dense"} label={"Name"} />
+                <StyledTextField variant={"outlined"} margin={"dense"} label={"Email"} />
+                <StyledTextField variant={"outlined"} margin={"dense"} label={"Password"} />
+                <StyledTextField variant={"outlined"} margin={"dense"} label={"Retype Password"} />
+                <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
             </Grid>
-            <Grid item container direction={"row-reverse"}>
-                <Button variant={"outlined"} color={"primary"}>
+            <Grid item container>
+                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onCreateAccountClicked}>
                     Create Account
+                </Button>
+                <Button variant={"text"} color={"primary"} onClick={onSignInClicked}>
+                    Already Have An Account?
                 </Button>
             </Grid>
         </React.Fragment>
     );
 };
 
-const ExistingAccount = () => {
+interface ExistingAccountProps {
+    onLoginClicked: () => void;
+    onSignUpClicked: () => void;
+}
+
+const ExistingAccount: React.FunctionComponent<ExistingAccountProps> = (props) => {
+    const { onLoginClicked, onSignUpClicked } = props;
+
     return (
         <React.Fragment>
             <Grid item container justify={"center"}>
-                <Typography variant={"h6"}>
+                <Typography align={"center"} variant={"h6"} color={"primary"}>
                     Login
                 </Typography>
             </Grid>
             <Grid item container justify={"center"}>
-                Input
+                <StyledTextField fullWidth variant={"outlined"} margin={"dense"} label={"Email"} />
+                <StyledTextField fullWidth variant={"outlined"} margin={"dense"} label={"Password"} />
             </Grid>
-        </React.Fragment>
+            <Grid item container justify={"flex-end"} style={{ marginTop: "-.5rem", marginBottom: "-.5rem" }}>
+                <Typography align={"center"} variant={"caption"} color={"primary"}>
+                    Forgot Password?
+                </Typography>
+            </Grid>
+            <Grid item container>
+                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onLoginClicked}>
+                    Login
+                </Button>
+                <Button variant={"text"} color={"primary"} onClick={onSignUpClicked} style={{ justifySelf: "flex-end" }}>
+                    Sign Up
+                </Button>
+            </Grid>
+        </React.Fragment >
     );
 };
 
 const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
-    const classes = useStyles();
     const [isLogin, setIsLogin] = React.useState<boolean>(true);
+
+    const classes = useStyles();
+    const history = useHistory();
+
+    // TODO: Authenticate user credentials and establish authorization
+    const handleLoginClicked = () => {
+        history.push("/dashboard");
+    };
+
+    const handleToggleLogin = () => {
+        setIsLogin(!isLogin);
+    };
+
+    const handleCreateAccount = () => {
+
+    };
 
     return (
         <div className={classes.root}>
             <Paper variant={"outlined"} className={classes.card}>
                 <Grid container className={classes.content} spacing={2}>
-                    <NewAccount />
+                    {isLogin ? (
+                        <ExistingAccount
+                            onLoginClicked={handleLoginClicked}
+                            onSignUpClicked={handleToggleLogin}
+                        />
+                    ) : (<NewAccount onCreateAccountClicked={handleCreateAccount} onSignInClicked={handleToggleLogin} />)}
                 </Grid>
             </Paper>
-            {/* {isLogin ? (<LoginCard />) : (<NewAccountCard />)} */}
         </div>
     );
 };
