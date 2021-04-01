@@ -7,10 +7,21 @@ import Sidebar from "../navigation/sidebar";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
+        display: "flex",
         width: "100vw",
         height: "100vh",
 
         backgroundColor: theme.palette.background.default,
+    },
+    drawer: {
+        [theme.breakpoints.up("sm")]: {
+            width: "15rem",
+            flexShrink: 0,
+        },
+    },
+    toolbar: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
     }
 }));
 
@@ -75,31 +86,33 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                     </Hidden>
                 </Toolbar>
             </StyledAppBar>
-            <Hidden smUp implementation="css">
-                <Sidebar
-                    variant={"temporary"}
-                    open={mobileOpen}
-                    onOpen={() => { }}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
-                >
-                    <AuthorizedUserRoutes />
-                </Sidebar>
-            </Hidden>
-            <Hidden xsDown implementation="css">
-                <Sidebar
-                    variant={"permanent"}
-                    open
-                    onOpen={() => { }}
-                    onClose={() => { }}
-                >
-                    <Toolbar />
-                    <AuthorizedUserRoutes />
-                </Sidebar>
-            </Hidden>
-            <Container>
+            <nav className={classes.drawer}>
+                <Hidden smUp implementation="css">
+                    <Sidebar
+                        variant={"temporary"}
+                        open={mobileOpen}
+                        onOpen={() => { }}
+                        onClose={handleDrawerToggle}
+                        ModalProps={{
+                            keepMounted: true,
+                        }}
+                    >
+                        <AuthorizedUserRoutes />
+                    </Sidebar>
+                </Hidden>
+                <Hidden xsDown implementation="css">
+                    <Sidebar
+                        variant={"permanent"}
+                        open
+                        onOpen={() => { }}
+                        onClose={() => { }}
+                    >
+                        <Toolbar />
+                        <AuthorizedUserRoutes />
+                    </Sidebar>
+                </Hidden>
+            </nav>
+            <Container className={classes.content}>
                 <Toolbar />
                 <Toolbar />
                 {props.children}

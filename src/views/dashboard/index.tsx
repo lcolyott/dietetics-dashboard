@@ -10,16 +10,7 @@ function Dashboard() {
                     Welcome Back [Username]
                 </Typography>
             </Grid>
-            <Grid item xs={12} md={4}>
-                <Paper>
-                    <Toolbar>
-                        <Typography variant={"h6"} color={"primary"}>
-                            My Info
-                        </Typography>
-                    </Toolbar>
-                </Paper>
-            </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12}>
                 <UserPlacements semesterId={0} />
             </Grid>
         </Grid>

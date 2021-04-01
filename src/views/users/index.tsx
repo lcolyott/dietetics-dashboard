@@ -1,33 +1,10 @@
 import React, { Component, useEffect } from "react";
 import { Button, Container, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Toolbar, Typography, Switch as MSwitch } from "@material-ui/core";
-import { User } from "../../data/models";
+import { ApplicationUser } from "../../data/models";
 import { routes, userRoles, UserRoles } from "../../data/authorization";
 import { StyledTextField } from "../../components/input";
 import { Switch, useHistory, useParams } from "react-router-dom";
-
-const dummyUsers: User[] = [
-    {
-        Id: 0,
-        Name: "John Doe",
-        Email: "JohnDoe@email.com",
-        Phone: "x-xxx-xxx-xxxx",
-        Role: "student"
-    },
-    {
-        Id: 1,
-        Name: "Jill Doe",
-        Email: "JillDoe@email.com",
-        Phone: "x-xxx-xxx-xxxx",
-        Role: "preceptor"
-    },
-    {
-        Id: 2,
-        Name: "Ron Swanson",
-        Email: "RonSwanson@email.com",
-        Phone: "x-xxx-xxx-xxxx",
-        Role: "admin"
-    },
-];
+import { testUsers } from "../../data/test";
 
 interface AddUserProps {
     onAddUser: () => void;
@@ -71,35 +48,31 @@ interface UsersTableProps {
 
 const UsersTable: React.FunctionComponent<UsersTableProps> = (props) => {
     const { onSelectUser } = props;
+    const usersTableKeys: (string & keyof ApplicationUser)[] = [
+        "Name",
+        "Role",
+        "Email",
+        "Phone",
+    ];
 
     return (
-        <Table>
+        <Table style={{ tableLayout: "fixed" }}>
             <TableHead>
                 <TableRow>
-                    <TableCell>
-                        Id
-                    </TableCell>
-                    <TableCell>
-                        Name
-                    </TableCell>
-                    <TableCell>
-                        Email
-                    </TableCell>
-                    <TableCell>
-                        Phone
-                    </TableCell>
-                    <TableCell>
-                        Role
-                    </TableCell>
+                    {usersTableKeys.map((key, index) => (
+                        <TableCell key={index}>
+                            {key}
+                        </TableCell>
+                    ))}
                 </TableRow>
             </TableHead>
             <TableBody>
-                {dummyUsers.map((user, index) => {
+                {testUsers.map((user, index) => {
                     return (
                         <TableRow hover key={index} onClick={() => onSelectUser(user.Id)}>
-                            {Object.entries(user).map((entry, index) => (
+                            {usersTableKeys.map((key, index) => (
                                 <TableCell key={index}>
-                                    {entry[1]}
+                                    {user[key]}
                                 </TableCell>
                             ))}
                         </TableRow>
