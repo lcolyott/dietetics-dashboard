@@ -69,6 +69,9 @@ export interface Placement extends IIdentity {
 export interface WeeklyHours extends IIdentity {
     RotationId: number;
 
+    Submitted: boolean;
+    Approved: boolean;
+
     WeekOf: Date;
     Sunday: number;
     Monday: number;
@@ -95,4 +98,34 @@ export interface StudentUser extends ApplicationUser {
 
 export interface PreceptorUser extends ApplicationUser {
     SiteId: number;
+};
+
+export interface Notification extends IIdentity {
+    UserId: string;
+
+    Read: boolean;
+    Priority: number;
+    Message: string;
+    Date: Date;
+};
+
+export interface CourseTemplateMap extends IIdentity {
+    CourseId: number;
+    TemplateId: number;
+};
+
+export interface FormTemplate extends IIdentity {
+    Name: string;
+    Data: Blob;
+    LastUpdated: Date;
+};
+
+export interface FormRecord extends IIdentity {
+    TemplateId: number;
+    RotationId: number;
+
+    Submitted: boolean;
+    Approved: boolean;
+    Data: Blob;
+    LastUpdated: Date;
 };

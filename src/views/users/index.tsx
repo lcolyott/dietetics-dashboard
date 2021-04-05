@@ -43,7 +43,7 @@ const AddUser: React.FunctionComponent<AddUserProps> = (props) => {
 }
 
 interface UsersTableProps {
-    onSelectUser: (userId: number) => void;
+    onSelectUser: (userId: string | number) => void;
 };
 
 const UsersTable: React.FunctionComponent<UsersTableProps> = (props) => {
@@ -95,7 +95,7 @@ const Users: React.FunctionComponent<any> = (props) => {
         setShowTable(true);
     };
 
-    const handleUserSelected = (userId: number) => {
+    const handleUserSelected = (userId: string | number) => {
         history.push(routes.authorizedRoutes["manageUser"].path.replace(":userId", userId.toString()));
     };
 

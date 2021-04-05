@@ -1,5 +1,5 @@
 interface IIdentity {
-    Id: number;
+    Id: number | string;
 };
 
 export type { IIdentity };
