@@ -1,5 +1,8 @@
 import React from "react";
-import { } from "react-router-dom";
+import { Switch, useRouteMatch } from "react-router-dom";
+import { Unauthorized } from "..";
+import AuthRoute from "../../components/navigation/authroute";
+import { userRoles } from "../../data/authorization";
 
 interface SemestersProps {
 
@@ -18,6 +21,19 @@ class Semesters extends React.PureComponent<SemestersProps, SemestersState> {
     };
 
     //#region Component Lifecycle Callbacks
-
+    componentDidMount() { };
+    componentDidUpdate() { };
+    componentWillUnmount() { };
     //#endregion
-}
+
+    render() {
+        return (
+            <Switch>
+                <AuthRoute path={"/"} Component={Unauthorized} requiredRoles={userRoles.admins} />
+                <AuthRoute path={"/create"} Component={Unauthorized} requiredRoles={userRoles.admins} />
+            </Switch>
+        );
+    };
+};
+
+export default Semesters;
