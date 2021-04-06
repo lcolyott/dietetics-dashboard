@@ -1,4 +1,5 @@
 import { Dashboard, Login, Account, Placements, Users, ManageUser, Unauthorized, Scheduling } from "../views";
+import Semesters from "../views/semesters";
 
 enum UserRoles {
     admin = "admin",
@@ -65,6 +66,11 @@ const routes = {
             path: "/scheduling",
             authorizedRoles: userRoles.admins,
             component: Scheduling
+        },
+        semesters: {
+            path: "/semesters",
+            authorizedRoles: userRoles.admins,
+            component: Semesters
         },
     } as AuthorizedRoutes,
 }
