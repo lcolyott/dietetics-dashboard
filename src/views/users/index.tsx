@@ -115,6 +115,7 @@ const Users: React.FunctionComponent<any> = (props) => {
 };
 
 // TODO: Display appropriate input based on role
+// TODO: Sort table by role Admin -> Preceptor -> Student
 const ManageUser: React.FunctionComponent<any> = (props) => {
     //@ts-expect-error
     const { id } = useParams();

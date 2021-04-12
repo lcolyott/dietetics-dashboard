@@ -72,6 +72,11 @@ const routes = {
             authorizedRoles: userRoles.admins,
             component: Semesters
         },
+        sites: {
+            path: "/sites",
+            authorizedRoles: userRoles.admins,
+            component: Semesters
+        },
     } as AuthorizedRoutes,
 }
 

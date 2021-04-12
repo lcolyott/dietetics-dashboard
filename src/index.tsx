@@ -6,7 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { grey, lightBlue } from '@material-ui/core/colors';
+import MomentUtils from '@date-io/moment';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,9 +26,11 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={responsiveFontSizes(theme)}>
-        <App />
-      </ThemeProvider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <ThemeProvider theme={responsiveFontSizes(theme)}>
+          <App />
+        </ThemeProvider>
+      </MuiPickersUtilsProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

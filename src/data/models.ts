@@ -28,12 +28,13 @@ export interface Site extends IIdentity {
     AddressId: number;
     AffiliationAgreementId: number;
 
-    LastContact: Date;
-    Notes: string;
+    Organization: string;
+    Note: string;
     Clinical: boolean;
     Community: boolean;
     Food: boolean;
     Sports: boolean;
+    LastContact: Date;
 };
 
 export interface Semester extends IIdentity {
@@ -72,14 +73,20 @@ export interface WeeklyHours extends IIdentity {
     Submitted: boolean;
     Approved: boolean;
 
-    WeekOf: Date;
     Sunday: number;
+    SundayNote: string;
     Monday: number;
+    MondayNote: string;
     Tuesday: number;
+    TuesdayNote: string;
     Wednesday: number;
+    WednesdayNote: string;
     Thursday: number;
+    ThursdayNote: string;
     Friday: number;
+    FridayNote: string;
     Saturday: number;
+    SaturdayNote: string;
 };
 
 export interface ApplicationUser extends IIdentity {
@@ -104,8 +111,8 @@ export interface Notification extends IIdentity {
     UserId: string;
 
     Read: boolean;
-    Priority: number;
     Message: string;
+    Link?: string;
     Date: Date;
 };
 
@@ -114,13 +121,13 @@ export interface CourseTemplateMap extends IIdentity {
     TemplateId: number;
 };
 
-export interface FormTemplate extends IIdentity {
+export interface Template extends IIdentity {
     Name: string;
     Data: Blob;
     LastUpdated: Date;
 };
 
-export interface FormRecord extends IIdentity {
+export interface Record extends IIdentity {
     TemplateId: number;
     RotationId: number;
 
