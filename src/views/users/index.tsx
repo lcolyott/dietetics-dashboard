@@ -8,7 +8,7 @@ import { testUsers } from "../../data/test";
 
 interface AddUserProps {
     onAddUser: () => void;
-}
+};
 
 const AddUser: React.FunctionComponent<AddUserProps> = (props) => {
     const { onAddUser } = props;
@@ -33,7 +33,7 @@ const AddUser: React.FunctionComponent<AddUserProps> = (props) => {
                     ))}
                 </StyledTextField>
             </Container>
-            <Toolbar >
+            <Toolbar style={{ justifyContent: "right" }}>
                 <Button variant={"outlined"} color={"primary"} onClick={onAddUser}>
                     Create User
                 </Button>
@@ -46,6 +46,8 @@ interface UsersTableProps {
     onSelectUser: (userId: string | number) => void;
 };
 
+// TODO: Sort table by role Admin -> Preceptor -> Student
+// TODO: Color code roles
 const UsersTable: React.FunctionComponent<UsersTableProps> = (props) => {
     const { onSelectUser } = props;
     const usersTableKeys: (string & keyof ApplicationUser)[] = [
@@ -115,25 +117,32 @@ const Users: React.FunctionComponent<any> = (props) => {
 };
 
 // TODO: Display appropriate input based on role
-// TODO: Sort table by role Admin -> Preceptor -> Student
 const ManageUser: React.FunctionComponent<any> = (props) => {
     //@ts-expect-error
     const { id } = useParams();
     const history = useHistory();
+    const [userRole, setUserRole] = React.useState<"Student" | "Preceptor" | "Admin">("Preceptor");
 
     // TODO:
-    const handleUpdateUser = () => {
+    const handleSave = () => {
+        history.push(routes.authorizedRoutes["users"].path);
+    };
+
+    // TODO:
+    const handleCancel = () => {
         history.push(routes.authorizedRoutes["users"].path);
     };
 
     return (
         <Paper>
-            <Toolbar>
+            <Toolbar style={{ justifyContent: "space-between" }}>
                 <Typography align={"center"} variant={"h6"} color={"primary"}>
                     Manage User
                 </Typography>
-                Active
-                <MSwitch color={"primary"} />
+                <span>
+                    Active
+                    <MSwitch color={"primary"} />
+                </span>
             </Toolbar>
             <Container>
                 <StyledTextField label={"Name"} fullWidth margin={"dense"} variant={"outlined"} />
@@ -151,17 +160,22 @@ const ManageUser: React.FunctionComponent<any> = (props) => {
                         <MenuItem value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</MenuItem>
                     ))}
                 </StyledTextField>
-                *Students Only*
-                <StyledTextField label={"Graduation Date"} fullWidth margin={"dense"} variant={"outlined"} />
-                *Preceptors Only*
-                <StyledTextField select label={"Site"} fullWidth margin={"dense"} variant={"outlined"} />
+                {userRole === "Student" &&
+                    <StyledTextField label={"Graduation Date"} fullWidth margin={"dense"} variant={"outlined"} />
+                }
+                {userRole === "Preceptor" &&
+                    <StyledTextField select label={"Site"} fullWidth margin={"dense"} variant={"outlined"} />
+                }
             </Container>
-            <Toolbar>
-                <Button variant={"outlined"} color={"primary"} onClick={handleUpdateUser}>
-                    Update User
+            <Toolbar style={{ justifyContent: "right", columnGap: ".5rem" }}>
+                <Button variant={"outlined"} color={"primary"} onClick={handleSave}>
+                    Save
+                </Button>
+                <Button variant={"outlined"} color={"primary"} onClick={handleCancel}>
+                    Cancel
                 </Button>
             </Toolbar>
-        </Paper>
+        </Paper >
     );
 };
 

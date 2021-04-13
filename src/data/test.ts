@@ -52,12 +52,13 @@ export const testSites: Site[] = [
         AddressId: 0,
         AffiliationAgreementId: -1,
 
-        LastContact: new Date(),
-        Notes: "This is a site note",
+        Organization: "Test Organization",
+        Note: "This is a site note",
         Clinical: true,
         Community: true,
         Food: true,
-        Sports: true
+        Sports: true,
+        LastContact: new Date(),
     }
 ];
 
@@ -160,8 +161,8 @@ export const testUsers: ApplicationUser[] = [
         Id: 2,
         ContactId: 2,
         Active: true,
-        Name: "Ron Swanson",
-        Email: "RonSwanson@email.com",
+        Name: "Ron Gorbagio",
+        Email: "RonGorbagio@email.com",
         Phone: "x-xxx-xxx-xxxx",
         Role: "Admin"
     },

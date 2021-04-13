@@ -145,7 +145,7 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                 <div className={classes.content}>
                     <Typography gutterBottom variant={"h6"} color={"primary"}>
                         Semester
-                </Typography>
+                    </Typography>
                     <div className={classes.row}>
                         <StyledTextField
                             required
@@ -248,7 +248,7 @@ const SemesterSearch: React.FunctionComponent<RouteComponentProps> = (props) => 
 
     // TODO: Sort semesters by SemesterType Spring -> Summer -> Fall -> Winter, then by Year
     return (
-        <div className={classes.content}>
+        <div>
             <ResponsiveTable>
                 <TableHead>
                     <StyledTableRow>
@@ -274,7 +274,7 @@ const SemesterSearch: React.FunctionComponent<RouteComponentProps> = (props) => 
                     ))}
                 </TableBody>
             </ResponsiveTable>
-            <Button color={"primary"} variant={"outlined"} onClick={addNewSemester}>
+            <Button fullWidth color={"primary"} variant={"outlined"} onClick={addNewSemester}>
                 Add Semester
             </Button>
         </div>

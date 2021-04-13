@@ -59,7 +59,8 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
             "/placements",
             "/users",
             "/scheduling",
-            "/semesters"
+            "/semesters",
+            "/sites"
         ];
 
         return (
