@@ -215,7 +215,6 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                         </Button>
                     </div>
                 </div>
-                <Divider />
                 <Toolbar disableGutters className={classes.actions}>
                     <Button color={"primary"} variant={"outlined"} onClick={submit}>
                         Submit

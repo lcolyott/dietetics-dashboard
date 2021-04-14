@@ -1,5 +1,53 @@
-import { createStyles, TextField, Theme, withStyles } from "@material-ui/core";
+import { createStyles, Input, InputBase, TextField, TextFieldProps, Theme, WithStyles, withStyles } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
+import transitions from "@material-ui/core/styles/transitions";
 import React from "react";
+
+const StyledInput = withStyles((theme: Theme) => createStyles({
+    root: {
+        "& fieldset": {
+            border: theme.input.border.unfocused,
+            borderRadius: "2px",
+            transition: theme.input.border.transition,
+        },
+
+        "&:hover": {
+            "& fieldset": {
+                borderColor: grey[600],
+            },
+        }
+    },
+    underline: {
+        "&:before": {
+            display: "none"
+        },
+        "&:after": {
+            display: "none"
+        }
+    },
+    focused: {
+        border: theme.input.border.focused
+    },
+    disabled: {
+
+    },
+    error: {
+
+    },
+    multiline: {
+
+    },
+    fullWidth: {
+
+    },
+    input: {
+        margin: theme.spacing(0, 1),
+    }
+}))(({ classes, ...rest }: Omit<TextFieldProps, "variant">) => (
+    <TextField variant={"outlined"} classes={{ ...classes }} {...rest} />
+));
+
+// TODO: Create StyledFileInput
 
 const StyledTextField = withStyles((theme: Theme) => createStyles({
     root: {
@@ -7,4 +55,4 @@ const StyledTextField = withStyles((theme: Theme) => createStyles({
     }
 }))(TextField);
 
-export { StyledTextField }
+export { StyledTextField, StyledInput }

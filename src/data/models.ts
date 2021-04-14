@@ -19,7 +19,7 @@ export interface AffiliationAgreement extends IIdentity {
     Number: string;
     Date: Date;
     ExpirationDate: Date;
-    File: Blob;
+    File?: Blob;
 };
 
 export interface Site extends IIdentity {

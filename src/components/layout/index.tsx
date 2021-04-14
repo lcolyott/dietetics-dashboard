@@ -22,6 +22,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     toolbar: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
+        padding: theme.spacing(2),
+        overflow: "scroll",
+
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
     }
 }));
 
@@ -115,7 +123,6 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                 </Hidden>
             </nav>
             <Container className={classes.content}>
-                <Toolbar />
                 <Toolbar />
                 {props.children}
             </Container>

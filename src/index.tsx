@@ -10,6 +10,28 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { grey, lightBlue } from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 
+declare module '@material-ui/core/styles/createMuiTheme' {
+  interface Theme {
+    input: {
+      border: {
+        unfocused: string;
+        focused: string;
+        transition: string;
+      }
+    }
+  }
+
+  interface ThemeOptions {
+    input?: {
+      border?: {
+        unfocused?: string;
+        focused?: string;
+        transition?: string;
+      }
+    }
+  }
+};
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -20,6 +42,13 @@ const theme = createMuiTheme({
       main: "#fff",
       contrastText: grey[800]
     },
+  },
+  input: {
+    border: {
+      unfocused: "2px solid " + grey[400],
+      focused: "2px solid " + lightBlue[400],
+      transition: "border .5s",
+    }
   }
 })
 
