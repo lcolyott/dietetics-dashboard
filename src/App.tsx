@@ -4,6 +4,8 @@ import AuthRoute from "./components/navigation/authroute";
 import { userRoles, routes } from "./data/authorization";
 import { Container, createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
 import AppLayout from './components/layout';
+import { AuthContextProvider } from './components/context/auth';
+import { NavContextProvider } from './components/context/nav';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

@@ -5,16 +5,24 @@ import { RouteComponentProps, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { StyledTextField } from "../../components/input";
-import { isJSDocCommentContainingNode } from "typescript";
+import { isJSDocCommentContainingNode, JSDocUnknownType } from "typescript";
+import AuthContext from "../../components/context/auth";
+import NavContext from "../../components/context/nav";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         display: "flex",
-        padding: "1rem",
+        flexDirection: "column",
+
+        width: "100%",
+        height: "100%",
+
         justifyContent: "center",
+        alignItems: "center",
     },
     card: {
-        maxWidth: "25rem"
+        maxWidth: "25rem",
+        margin: "0 0.75rem 0 0.75rem",
     },
     content: {
         padding: "1rem",
@@ -88,12 +96,12 @@ const RoleButton = withStyles((theme: Theme) => createStyles({
 }))(ToggleButton);
 
 interface NewAccountProps {
-    onCreateAccountClicked: () => void;
-    onSignInClicked: () => void;
-}
+    onCreateAccount: (args?: unknown) => void;
+    onSignIn: (args?: unknown) => void;
+};
 
 const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
-    const { onCreateAccountClicked, onSignInClicked } = props;
+    const { onCreateAccount, onSignIn } = props;
     const [userRole, setUserRole] = React.useState<"student" | "preceptor">("student");
 
     const theme = useTheme();
@@ -132,10 +140,10 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
                 <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
             </Grid>
             <Grid item container>
-                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onCreateAccountClicked}>
+                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onCreateAccount}>
                     Create Account
                 </Button>
-                <Button variant={"text"} color={"primary"} onClick={onSignInClicked}>
+                <Button variant={"text"} color={"primary"} onClick={onSignIn}>
                     Already Have An Account?
                 </Button>
             </Grid>
@@ -144,12 +152,12 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
 };
 
 interface ExistingAccountProps {
-    onLoginClicked: () => void;
-    onSignUpClicked: () => void;
-}
+    onSignIn: (args?: unknown) => void;
+    onSignUp: (args?: unknown) => void;
+};
 
 const ExistingAccount: React.FunctionComponent<ExistingAccountProps> = (props) => {
-    const { onLoginClicked, onSignUpClicked } = props;
+    const { onSignIn, onSignUp } = props;
 
     return (
         <React.Fragment>
@@ -168,10 +176,10 @@ const ExistingAccount: React.FunctionComponent<ExistingAccountProps> = (props) =
                 </Typography>
             </Grid>
             <Grid item container>
-                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onLoginClicked}>
+                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onSignIn}>
                     Login
                 </Button>
-                <Button variant={"text"} color={"primary"} onClick={onSignUpClicked} style={{ justifySelf: "flex-end" }}>
+                <Button variant={"text"} color={"primary"} onClick={onSignUp} style={{ justifySelf: "flex-end" }}>
                     Sign Up
                 </Button>
             </Grid>
@@ -180,34 +188,54 @@ const ExistingAccount: React.FunctionComponent<ExistingAccountProps> = (props) =
 };
 
 const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
-    const [isLogin, setIsLogin] = React.useState<boolean>(true);
+    const [visiblePane, setVisiblePane] = React.useState<string & "login" | "create" | "forgot">("login");
 
     const classes = useStyles();
-    const history = useHistory();
+    const auth = React.useContext(AuthContext);
+    const nav = React.useContext(NavContext);
 
-    // TODO: Authenticate user credentials and establish authorization
-    const handleLoginClicked = () => {
-        history.push("/dashboard");
+    // TODO: 
+    const signIn = (args?: unknown) => {
+        auth?.signIn();
     };
 
-    const handleToggleLogin = () => {
-        setIsLogin(!isLogin);
+    // TODO:
+    const createAccount = (args?: unknown) => {
+        auth?.signIn();
     };
 
-    const handleCreateAccount = () => {
+    const setPane = (pane: string & "login" | "create" | "forgot") => {
+        setVisiblePane(pane);
+    };
 
+    const renderVisiblePane = () => {
+        switch (visiblePane) {
+            case "login": {
+                return <ExistingAccount
+                    onSignIn={signIn}
+                    onSignUp={() => setPane("create")}
+                />
+            }
+            case "create": {
+                return <NewAccount
+                    onCreateAccount={createAccount}
+                    onSignIn={() => setPane("login")}
+                />
+            }
+            case "forgot": {
+                return <React.Fragment />
+            }
+            default: {
+                return <React.Fragment />
+            }
+        }
     };
 
     return (
         <div className={classes.root}>
             <Paper variant={"outlined"} className={classes.card}>
                 <Grid container className={classes.content} spacing={2}>
-                    {isLogin ? (
-                        <ExistingAccount
-                            onLoginClicked={handleLoginClicked}
-                            onSignUpClicked={handleToggleLogin}
-                        />
-                    ) : (<NewAccount onCreateAccountClicked={handleCreateAccount} onSignInClicked={handleToggleLogin} />)}
+                    {renderVisiblePane()}
                 </Grid>
             </Paper>
         </div>

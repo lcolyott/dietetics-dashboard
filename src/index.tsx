@@ -9,6 +9,8 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { grey, lightBlue } from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
+import { NavContextProvider } from './components/context/nav';
+import { AuthContextProvider } from './components/context/auth';
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
@@ -57,7 +59,11 @@ ReactDOM.render(
     <BrowserRouter>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <ThemeProvider theme={responsiveFontSizes(theme)}>
-          <App />
+          <NavContextProvider>
+            <AuthContextProvider>
+              <App />
+            </AuthContextProvider>
+          </NavContextProvider>
         </ThemeProvider>
       </MuiPickersUtilsProvider>
     </BrowserRouter>

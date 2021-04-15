@@ -107,6 +107,8 @@ export interface PreceptorUser extends ApplicationUser {
     SiteId: number;
 };
 
+export type User = ApplicationUser | StudentUser | PreceptorUser;
+
 export interface Notification extends IIdentity {
     UserId: string;
 

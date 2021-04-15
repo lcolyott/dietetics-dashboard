@@ -1,9 +1,19 @@
 import React from "react";
+import { RouteComponentProps, useRouteMatch } from "react-router";
+import AuthContext from "../../components/context/auth";
+import NavContext from "../../components/context/nav";
+import MyAccount from "../../components/myaccount";
 
-function Account() {
+interface AccountProps extends RouteComponentProps { };
+
+const Account: React.FunctionComponent<AccountProps> = (props) => {
+    const match = useRouteMatch();
+    const auth = React.useContext(AuthContext);
+    const nav = React.useContext(NavContext);
+
     return (
         <div>
-            account
+            {auth?.user && <MyAccount user={auth?.user} />}
         </div>
     );
 };

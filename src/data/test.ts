@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Address, ApplicationUser, Contact, Course, Placement, Rotation, Semester, Site } from "./models";
+import { Address, ApplicationUser, Contact, Course, Placement, PreceptorUser, Rotation, Semester, Site, StudentUser } from "./models";
 
 export const testContacts: Contact[] = [
     {
@@ -138,7 +138,7 @@ export const testRotations: Rotation[] = [
     },
 ];
 
-export const testUsers: ApplicationUser[] = [
+export const testUsers: (ApplicationUser | StudentUser | PreceptorUser)[] = [
     {
         Id: 0,
         ContactId: 0,
@@ -146,11 +146,13 @@ export const testUsers: ApplicationUser[] = [
         Name: "John Doe",
         Email: "JohnDoe@email.com",
         Phone: "x-xxx-xxx-xxxx",
-        Role: "Student"
+        Role: "Student",
+        GraduationDate: undefined
     },
     {
         Id: 1,
         ContactId: 1,
+        SiteId: 0,
         Active: true,
         Name: "Jill Doe",
         Email: "JillDoe@email.com",

@@ -1,8 +1,12 @@
-import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemText, makeStyles, Theme, Toolbar, withStyles } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, withStyles } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router";
-import { UserRoles } from "../../data/authorization";
+import { AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
+import AuthContext from "../context/auth";
+import NavContext from "../context/nav";
 import Sidebar from "../navigation/sidebar";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -47,41 +51,51 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
 
     const classes = useStyles();
-    const history = useHistory();
+    const auth = useContext(AuthContext);
+    const nav = useContext(NavContext);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
     const handleNavigate = (route: string) => {
-        history.push(route);
+        nav?.navigate?.(route);
 
         mobileOpen && setMobileOpen(false);
     };
 
     // TODO: Grab routes based on user role
     const AuthorizedUserRoutes = () => {
-        let authorizedRoutes = [
-            "/account",
-            "/dashboard",
-            "/placements",
-            "/users",
-            "/scheduling",
-            "/semesters",
-            "/sites"
-        ];
+        if (auth && auth.user) {
+            let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role.toLowerCase() as "student" | "preceptor" | "admin"];
 
-        return (
-            <List>
-                {authorizedRoutes.map((route, index) => {
-                    return (
-                        <ListItem button key={index} onClick={() => handleNavigate(route)}>
-                            <ListItemText primary={route} />
-                        </ListItem>
-                    );
-                })}
-            </List >
-        );
+            return (
+                <List>
+                    {Object.keys(userRoutes).map((key, index) => {
+                        let route = userRoutes[key];
+
+                        return (
+                            <ListItem button key={index} onClick={() => handleNavigate(route.path)}>
+                                {route.icon &&
+                                    <ListItemIcon>
+                                        {route.icon}
+                                    </ListItemIcon>
+                                }
+                                <ListItemText primary={route.path} />
+                            </ListItem>
+                        );
+                    })}
+                    <ListItem button onClick={() => auth.signOut()}>
+                        <ListItemIcon>
+                            <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
+                        </ListItemIcon>
+                        <ListItemText primary={"Logout"} />
+                    </ListItem>
+                </List >
+            );
+        }
+
+        return <React.Fragment />;
     };
 
     return (
