@@ -5,6 +5,7 @@ import { Contact } from "../../data/models";
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         display: "inline-block",
+
         backgroundColor: theme.palette.background.default,
         border: theme.input.border.unfocused,
         borderRadius: "8px",

@@ -39,7 +39,7 @@ const AuthContextProvider: React.FunctionComponent<any> = (props) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (process.env.NODE_ENV === "development") {
-                    setUser(testUsers[0]);
+                    setUser(testUsers[2]);
                 }
             }, 1000);
 
