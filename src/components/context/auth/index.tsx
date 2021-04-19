@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { defaultRoutes } from "../../../data/authorization";
+import { routes } from "../../../data/authorization";
 import { ApplicationUser, StudentUser, PreceptorUser, User } from "../../../data/models";
 import { testUsers } from "../../../data/test";
 import NavContext from "../nav";
@@ -23,11 +23,16 @@ const AuthContextProvider: React.FunctionComponent<any> = (props) => {
 
     // Only called when the user object changes in state
     useEffect(() => {
+        // If dev, stay signed in as an Admin
+        // TODO: Move to redux store
+        if (process.env.NODE_ENV === "development") {
+            setUser(testUsers[2]);
+        }
 
         // If there is a user, we want to navigate to this user's default route
         if (user) {
-            nav?.navigate(defaultRoutes[user.Role.toLowerCase() as "student" | "preceptor" | "admin"].path)
-        };
+            nav?.navigate(routes[user.Role.toLowerCase() as "student" | "preceptor" | "admin"]["default"])
+        }
 
         return function cleanup() {
 
@@ -38,6 +43,7 @@ const AuthContextProvider: React.FunctionComponent<any> = (props) => {
     const signIn = (args?: unknown): Promise<void> => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
+                // If dev environment, set use to Admin
                 if (process.env.NODE_ENV === "development") {
                     setUser(testUsers[2]);
                 }

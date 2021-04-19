@@ -1,23 +1,64 @@
 import React from "react";
 import SiteUpdateForm from "./siteupdate";
+import AccountUpdateForm from "./accountupdate";
+import { createStyles, Divider, makeStyles, Paper, Theme, Toolbar, withStyles, WithStyles } from "@material-ui/core";
 
-interface ModelUpdateFormProps<T> {
-    model: T;
+const formStyles = (theme: Theme) => createStyles({
+    root: {
+
+    },
+    container: {
+
+    },
+    header: {
+
+    },
+    body: {
+
+    },
+    footer: {
+
+    }
+});
+
+interface ModelInput<T> {
+
 };
 
-// Factory function that returns a typed ModelUpdateForm
-function ModelUpdateForm<T>(props: ModelUpdateFormProps<T>) {
-    const UpdateForm: React.FunctionComponent<ModelUpdateFormProps<T>> = (props) => {
-        return (
-            <React.Fragment>
-                Model Update Form
-            </React.Fragment>
-        );
-    };
-
-    return UpdateForm;
+interface FormInputMap<T> {
+    [key: string]: keyof T;
 };
 
-export { SiteUpdateForm };
+interface UpdateFormProps extends WithStyles<typeof formStyles> {
+    model: unknown;
+    title?: string;
+    locked?: boolean;
+    inputMap?: FormInputMap<unknown>;
+};
 
-export default ModelUpdateForm;
+const UpdateForm = withStyles(formStyles)((props: UpdateFormProps) => {
+    const { model, title, locked, inputMap, classes } = props;
+
+    return (
+        <Paper className={classes.root}>
+            <div className={classes.container}>
+                {title &&
+                    <Toolbar className={classes.header}>
+                        {title}
+                    </Toolbar>
+                }
+                <Divider variant={"middle"} />
+                <div className={classes.container}>
+
+                </div>
+                <Toolbar className={classes.footer}>
+
+                </Toolbar>
+            </div>
+        </Paper>
+    );
+});
+
+export { SiteUpdateForm, AccountUpdateForm };
+
+export default UpdateForm;

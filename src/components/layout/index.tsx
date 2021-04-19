@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, withStyles } from "@material-ui/core";
+import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
 import React, { useContext } from "react";
 import { useHistory } from "react-router";
-import { AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
+import { AuthorizedRoute, AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
 import AuthContext from "../context/auth";
 import NavContext from "../context/nav";
 import Sidebar from "../navigation/sidebar";
@@ -58,7 +58,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
         setMobileOpen(!mobileOpen);
     };
 
-    const handleNavigate = (route: string) => {
+    const handleNavigate = (route: AuthorizedRoute) => {
         nav?.navigate?.(route);
 
         mobileOpen && setMobileOpen(false);
@@ -71,17 +71,15 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
 
             return (
                 <List>
-                    {Object.keys(userRoutes).map((key, index) => {
-                        let route = userRoutes[key];
-
+                    {Object.values(userRoutes).slice(1).filter(r => r.navigable || r.navigable === undefined).map((route, index) => {
                         return (
-                            <ListItem button key={index} onClick={() => handleNavigate(route.path)}>
+                            <ListItem button key={index} onClick={() => handleNavigate(route)}>
                                 {route.icon &&
                                     <ListItemIcon>
-                                        {route.icon}
+                                        <route.icon />
                                     </ListItemIcon>
                                 }
-                                <ListItemText primary={route.path} />
+                                <ListItemText primary={route.label ?? route.path} />
                             </ListItem>
                         );
                     })}
@@ -108,6 +106,9 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                             <Menu />
                         </IconButton>
                     </Hidden>
+                    <Typography variant={"h6"} color={"primary"}>
+                        {nav?.navHeader}
+                    </Typography>
                 </Toolbar>
             </StyledAppBar>
             <nav className={classes.drawer}>

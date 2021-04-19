@@ -8,7 +8,7 @@ import { RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-ro
 import { Unauthorized } from "..";
 import { StyledTextField } from "../../components/input";
 import AuthRoute from "../../components/navigation/authroute";
-import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../components/responsiveTable";
+import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../components/responsivetable";
 import { userRoles } from "../../data/authorization";
 import { Course, Semester } from "../../data/models";
 

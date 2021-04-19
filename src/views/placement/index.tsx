@@ -4,7 +4,7 @@ import { RouteComponentProps, useRouteMatch } from "react-router";
 import ContactCard from "../../components/contact";
 import AuthContext from "../../components/context/auth";
 import NavContext from "../../components/context/nav";
-import PlacementForms from "../../components/placement/forms";
+import PlacementForms from "../../components/placement";
 import SiteCard from "../../components/site";
 import TimeLogger from "../../components/timelogger";
 

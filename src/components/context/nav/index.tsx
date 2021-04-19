@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router";
+import { AuthorizedRoute } from "../../../data/authorization";
 import { } from "../../../data/models";
 
 interface NavContextState {
-    navigate: (to: string) => void;
+    navHeader?: string;
+    navigate: (to: AuthorizedRoute) => void;
 };
 
 const NavContext = React.createContext<NavContextState | undefined>(undefined);
@@ -26,8 +28,15 @@ const NavContextProvider: React.FunctionComponent<any> = (props) => {
         };
     }, [state]);
 
-    const navigate = (to: string) => {
-        history.push(to);
+    const navigate = (to: AuthorizedRoute) => {
+        let newState = {
+            navHeader: to.label,
+            navigate
+        };
+
+        setState(newState);
+
+        history.push(to.path);
     };
 
     return (
