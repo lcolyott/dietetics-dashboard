@@ -150,5 +150,9 @@ const routes = {
     "admin": adminRoutes,
 };
 
+function getDefaultRoute(userRole: "Admin" | "Student" | "Preceptor"): AuthorizedRoute {
+    return routes[userRole.toLowerCase() as "admin" | "student" | "preceptor"]["default"];
+};
+
 export type { AuthorizedRoute, AuthorizedRoutes };
-export { userRoles, routes, UserRoles };
+export { userRoles, routes, UserRoles, getDefaultRoute };

@@ -99,15 +99,7 @@ const ItemTypeMap: ItemTypeMap = {
 
 const RootItem: React.FunctionComponent<any> = (props) => {
     return (
-        <LayoutItem itemId={0} type={ItemTypes.ROOT} direction={"row"} itemChildren={[
-            {
-                itemId: 0, type: ItemTypes.LAYOUT, itemChildren: [
-                    { itemId: 3, type: ItemTypes.ITEM }
-                ]
-            },
-            { itemId: 1, type: ItemTypes.LAYOUT },
-            { itemId: 2, type: ItemTypes.LAYOUT },
-        ]} />
+        <LayoutItem itemId={0} type={ItemTypes.ROOT} direction={"row"} />
     );
 };
 

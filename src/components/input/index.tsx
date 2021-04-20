@@ -17,32 +17,6 @@ const StyledInput = withStyles((theme: Theme) => createStyles({
             },
         }
     },
-    underline: {
-        "&:before": {
-            display: "none"
-        },
-        "&:after": {
-            display: "none"
-        }
-    },
-    focused: {
-        border: theme.input.border.focused
-    },
-    disabled: {
-
-    },
-    error: {
-
-    },
-    multiline: {
-
-    },
-    fullWidth: {
-
-    },
-    input: {
-        margin: theme.spacing(0, 1),
-    }
 }))(({ classes, ...rest }: Omit<TextFieldProps, "variant">) => (
     <TextField variant={"outlined"} classes={{ ...classes }} {...rest} />
 ));

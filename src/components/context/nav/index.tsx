@@ -22,12 +22,6 @@ const NavContextProvider: React.FunctionComponent<any> = (props) => {
         setState(context);
     }, []);
 
-    useEffect(() => {
-        return function cleanup() {
-
-        };
-    }, [state]);
-
     const navigate = (to: AuthorizedRoute) => {
         let newState = {
             navHeader: to.label,

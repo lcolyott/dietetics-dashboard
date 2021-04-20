@@ -4,10 +4,14 @@ import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap, faUserTie } from "@fortawesome/free-solid-svg-icons";
-import { StyledTextField } from "../../components/input";
+import { StyledInput, StyledTextField } from "../../components/input";
 import { isJSDocCommentContainingNode, JSDocUnknownType } from "typescript";
 import AuthContext from "../../components/context/auth";
 import NavContext from "../../components/context/nav";
+import { UserSignInArgs, UserCreationArgs } from "../../data/events";
+import { Form, Formik } from "formik";
+import { User } from "../../data/models";
+import { getDefaultRoute } from "../../data/authorization";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -96,8 +100,8 @@ const RoleButton = withStyles((theme: Theme) => createStyles({
 }))(ToggleButton);
 
 interface NewAccountProps {
-    onCreateAccount: (args?: unknown) => void;
-    onSignIn: (args?: unknown) => void;
+    onCreateAccount: (args: UserCreationArgs) => void;
+    onSignIn: () => void;
 };
 
 const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
@@ -111,7 +115,17 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
         if (value) {
             setUserRole(value);
         }
-    }
+    };
+
+    // TODO:
+    const createAccount = () => {
+        onCreateAccount?.({});
+    };
+
+    // TODO:
+    const clear = () => {
+
+    };
 
     return (
         <React.Fragment>
@@ -140,7 +154,7 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
                 <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
             </Grid>
             <Grid item container>
-                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onCreateAccount}>
+                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={createAccount}>
                     Create Account
                 </Button>
                 <Button variant={"text"} color={"primary"} onClick={onSignIn}>
@@ -152,38 +166,58 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
 };
 
 interface ExistingAccountProps {
-    onSignIn: (args?: unknown) => void;
-    onSignUp: (args?: unknown) => void;
+    onSignIn: (args: UserSignInArgs) => void;
+    onSignUp: () => void;
 };
 
 const ExistingAccount: React.FunctionComponent<ExistingAccountProps> = (props) => {
     const { onSignIn, onSignUp } = props;
 
+    // TODO:
+    const signIn = (values: UserSignInArgs) => {
+        onSignIn?.(values);
+    };
+
     return (
-        <React.Fragment>
-            <Grid item container justify={"center"}>
-                <Typography align={"center"} variant={"h6"} color={"primary"}>
-                    Login
-                </Typography>
-            </Grid>
-            <Grid item container justify={"center"}>
-                <StyledTextField fullWidth variant={"outlined"} margin={"dense"} label={"Email"} />
-                <StyledTextField fullWidth variant={"outlined"} margin={"dense"} label={"Password"} />
-            </Grid>
-            <Grid item container justify={"flex-end"} style={{ marginTop: "-.5rem", marginBottom: "-.5rem" }}>
-                <Typography align={"center"} variant={"caption"} color={"primary"}>
-                    Forgot Password?
-                </Typography>
-            </Grid>
-            <Grid item container>
-                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={onSignIn}>
-                    Login
-                </Button>
-                <Button variant={"text"} color={"primary"} onClick={onSignUp} style={{ justifySelf: "flex-end" }}>
-                    Sign Up
-                </Button>
-            </Grid>
-        </React.Fragment >
+        <Formik
+            initialValues={{
+                Username: "",
+                Password: ""
+            } as UserSignInArgs}
+            onSubmit={(values) => signIn(values)}
+        >
+            {({
+                values,
+                handleChange,
+                handleBlur,
+                handleSubmit
+            }) => (
+                <form onSubmit={handleSubmit}>
+                    <Grid item container justify={"center"}>
+                        <Typography align={"center"} variant={"h6"} color={"primary"}>
+                            Login
+                        </Typography>
+                    </Grid>
+                    <Grid container justify={"center"} style={{ margin: "1rem 0 1rem 0", rowGap: ".75rem" }}>
+                        <StyledInput type={"email"} name={"Username"} required fullWidth label={"Email"} value={values.Username} onBlur={handleBlur} onChange={handleChange} />
+                        <StyledInput type={"password"} name={"Password"} required fullWidth label={"Password"} value={values.Password} onBlur={handleBlur} onChange={handleChange} />
+                    </Grid>
+                    <Grid item container justify={"flex-end"} style={{ marginTop: "-.5rem", marginBottom: "1rem" }}>
+                        <Typography align={"center"} variant={"caption"} color={"primary"}>
+                            Forgot Password?
+                        </Typography>
+                    </Grid>
+                    <Grid item container>
+                        <Button type={"submit"} fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }}>
+                            Login
+                        </Button>
+                        <Button variant={"text"} color={"primary"} onClick={onSignUp} style={{ justifySelf: "flex-end" }}>
+                            Sign Up
+                        </Button>
+                    </Grid>
+                </form>
+            )}
+        </Formik >
     );
 };
 
@@ -194,14 +228,21 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
     const auth = React.useContext(AuthContext);
     const nav = React.useContext(NavContext);
 
-    // TODO: 
-    const signIn = (args?: unknown) => {
-        auth?.signIn();
+    const signIn = (args: UserSignInArgs) => {
+        auth?.signIn(args)
+            .then(action => {
+                let user = action.payload;
+
+                if (user) {
+                    nav?.navigate(getDefaultRoute((user as User).Role));
+                }
+            })
+            .catch();
     };
 
     // TODO:
-    const createAccount = (args?: unknown) => {
-        auth?.signIn();
+    const createAccount = (args: UserCreationArgs) => {
+
     };
 
     const setPane = (pane: string & "login" | "create" | "forgot") => {

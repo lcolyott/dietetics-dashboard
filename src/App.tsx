@@ -24,8 +24,8 @@ function App() {
   return (
     <div className={classes.root}>
       <Switch>
+        <AuthRoute index exact path={routes.unauthorizedRoutes["login"].path} Component={routes.unauthorizedRoutes["login"].component} requiredRoles={["anonymous"]} />
         <Route path={routes.unauthorizedRoutes["unauthorized"].path} component={routes.unauthorizedRoutes["unauthorized"].component} />
-        <Route exact path={routes.unauthorizedRoutes["login"].path} component={routes.unauthorizedRoutes["login"].component} />
         <AppLayout>
           {Object.entries(routes.authorizedRoutes).map((entry, index) => (
             <AuthRoute key={index} path={entry[1].path} Component={entry[1].component} requiredRoles={entry[1].authorizedRoles ?? userRoles.admins} />

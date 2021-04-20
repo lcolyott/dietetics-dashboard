@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router";
 import { AuthorizedRoute, AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
 import AuthContext from "../context/auth";
@@ -54,6 +54,10 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     const auth = useContext(AuthContext);
     const nav = useContext(NavContext);
 
+    useEffect(() => {
+        console.log(auth);
+    }, [auth])
+
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -65,36 +69,36 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     };
 
     // TODO: Grab routes based on user role
-    const AuthorizedUserRoutes = () => {
-        if (auth && auth.user) {
-            let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role.toLowerCase() as "student" | "preceptor" | "admin"];
+    // const AuthorizedUserRoutes = () => {
+    //     if (auth && auth.user) {
+    //         let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role?.toLowerCase() as "student" | "preceptor" | "admin"];
 
-            return (
-                <List>
-                    {Object.values(userRoutes).slice(1).filter(r => r.navigable || r.navigable === undefined).map((route, index) => {
-                        return (
-                            <ListItem button key={index} onClick={() => handleNavigate(route)}>
-                                {route.icon &&
-                                    <ListItemIcon>
-                                        <route.icon />
-                                    </ListItemIcon>
-                                }
-                                <ListItemText primary={route.label ?? route.path} />
-                            </ListItem>
-                        );
-                    })}
-                    <ListItem button onClick={() => auth.signOut()}>
-                        <ListItemIcon>
-                            <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
-                        </ListItemIcon>
-                        <ListItemText primary={"Logout"} />
-                    </ListItem>
-                </List >
-            );
-        }
+    //         return (
+    //             <List>
+    //                 {Object.values(userRoutes).slice(1).filter(r => r.navigable || r.navigable === undefined).map((route, index) => {
+    //                     return (
+    //                         <ListItem button key={index} onClick={() => handleNavigate(route)}>
+    //                             {route.icon &&
+    //                                 <ListItemIcon>
+    //                                     <route.icon />
+    //                                 </ListItemIcon>
+    //                             }
+    //                             <ListItemText primary={route.label ?? route.path} />
+    //                         </ListItem>
+    //                     );
+    //                 })}
+    //                 <ListItem button onClick={() => auth.signOut()}>
+    //                     <ListItemIcon>
+    //                         <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
+    //                     </ListItemIcon>
+    //                     <ListItemText primary={"Logout"} />
+    //                 </ListItem>
+    //             </List >
+    //         );
+    //     }
 
-        return <React.Fragment />;
-    };
+    //     return <React.Fragment />;
+    // };
 
     return (
         <div className={classes.root}>
@@ -122,7 +126,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                             keepMounted: true,
                         }}
                     >
-                        <AuthorizedUserRoutes />
+                        {/* <AuthorizedUserRoutes /> */}
                     </Sidebar>
                 </Hidden>
                 <Hidden xsDown implementation="css">
@@ -133,7 +137,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                         onClose={() => { }}
                     >
                         <Toolbar />
-                        <AuthorizedUserRoutes />
+                        {/* <AuthorizedUserRoutes /> */}
                     </Sidebar>
                 </Hidden>
             </nav>
