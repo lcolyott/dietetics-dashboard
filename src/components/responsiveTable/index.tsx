@@ -1,4 +1,4 @@
-import { createStyles, Table, TableCell, TableProps, TableRow, Theme, WithStyles, withStyles } from "@material-ui/core";
+import { createStyles, Paper, Table, TableCell, TableContainer, TableProps, TableRow, Theme, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 
 type ResponsiveTableColumn = {
@@ -15,7 +15,9 @@ const RTable: React.FunctionComponent<ResponsiveTableProps> = (props) => {
     const tableProps = props as TableProps;
 
     return (
-        <Table {...tableProps} />
+        <TableContainer component={Paper}>
+            <Table {...tableProps} />
+        </TableContainer>
     );
 };
 
@@ -27,13 +29,14 @@ export const StyledTableRow = withStyles((theme: Theme) => createStyles({
 
 export const StyledTableCell = withStyles((theme: Theme) => createStyles({
     root: {
-
     },
     head: {
         fontWeight: "bolder",
 
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
+        // backgroundColor: theme.palette.primary.main,
+        border: "1px solid " + theme.palette.divider,
+
+        color: theme.palette.text.secondary,
     }
 }))(TableCell);
 

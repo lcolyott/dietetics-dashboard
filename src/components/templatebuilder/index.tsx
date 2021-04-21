@@ -1,43 +1,22 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-
-}), { name: "NDDTemplateBuilder" });
+import { DndProvider, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { ItemTypes, Item, LayoutItem, RootItem } from "./widgets";
 
 interface TemplateBuilderProps {
 
 };
 
+interface TemplateBuilderState {
 
-const ToolBox: React.FunctionComponent<any> = (props) => {
-    const classes = useStyles();
-
-    return (
-        <></>
-    );
-};
-
-const EditPane: React.FunctionComponent<any> = (props) => {
-    const classes = useStyles();
-
-    return (
-        <></>
-    );
-};
-
-const ComponentEditPane: React.FunctionComponent<any> = (props) => {
-    const classes = useStyles();
-
-    return (
-        <></>
-    );
 };
 
 const TemplateBuilder: React.FunctionComponent<TemplateBuilderProps> = (props) => {
-    const classes = useStyles();
-
     return (
-        <></>
+        <DndProvider backend={HTML5Backend}>
+            <RootItem />
+        </DndProvider>
     );
 };
+
+export default TemplateBuilder;

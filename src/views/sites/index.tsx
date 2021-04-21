@@ -9,7 +9,7 @@ import AddressInput from "../../components/input/address";
 import AffiliationInput from "../../components/input/affiliationagreement";
 import ContactInput from "../../components/input/contact/indext";
 import OfferedRotationsInput from "../../components/input/rotations";
-import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../components/responsiveTable";
+import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../components/responsivetable";
 import { Site } from "../../data/models";
 
 interface SitesProps extends RouteComponentProps { };

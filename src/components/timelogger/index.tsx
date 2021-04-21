@@ -2,7 +2,7 @@ import { Button, createStyles, Input, InputBase, makeStyles, Paper, TableBody, T
 import { Pagination } from "@material-ui/lab";
 import React, { useEffect } from "react";
 import { StyledInput } from "../input";
-import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../responsiveTable";
+import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../responsivetable";
 
 const StyledCellInput = withStyles((theme: Theme) => createStyles({
     root: {

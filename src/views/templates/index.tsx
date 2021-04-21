@@ -1,21 +1,16 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import React, { useContext } from "react";
-import { RouteComponentProps, useRouteMatch } from "react-router";
-import AuthContext from "../../components/context/auth";
+import React from "react";
+import { RouteComponentProps } from "react-router";
+import TemplateBuilder from "../../components/templatebuilder";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+interface TemplatesProps extends RouteComponentProps {
 
-}), { name: "NDDTemplates" });
-
-interface TemplatesProps extends RouteComponentProps { };
+};
 
 const Templates: React.FunctionComponent<TemplatesProps> = (props) => {
-    const classes = useStyles();
-    const match = useRouteMatch();
-    const auth = useContext(AuthContext);
-
     return (
-        <>Templates</>
+        <div>
+            <TemplateBuilder />
+        </div>
     );
 };
 

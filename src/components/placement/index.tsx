@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Paper, TableBody, TableHead, Theme } from "@material-ui/core";
 import React from "react";
-import { Record } from "../../../data/models";
-import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../responsiveTable";
+import { Record } from "../../data/models";
+import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../responsivetable";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {

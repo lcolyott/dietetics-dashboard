@@ -2,7 +2,7 @@ import { Container, Divider, Paper, Table, TableBody, TableCell, TableContainer,
 import moment from "moment";
 import React from "react";
 import { testPlacements, testSites, testRotations } from "../../data/test";
-import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../responsiveTable";
+import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../responsivetable";
 
 interface UserPlacementsProps {
     semesterId: number;

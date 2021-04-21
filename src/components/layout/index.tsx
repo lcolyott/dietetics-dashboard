@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, withStyles } from "@material-ui/core";
+import { AppBar, Container, createStyles, CssBaseline, Hidden, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router";
-import { AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
+import { AuthorizedRoute, AuthorizedRoutes, routes, UserRoles } from "../../data/authorization";
 import AuthContext from "../context/auth";
 import NavContext from "../context/nav";
 import Sidebar from "../navigation/sidebar";
@@ -54,49 +54,51 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     const auth = useContext(AuthContext);
     const nav = useContext(NavContext);
 
+    useEffect(() => {
+        console.log(auth);
+    }, [auth])
+
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
-    const handleNavigate = (route: string) => {
+    const handleNavigate = (route: AuthorizedRoute) => {
         nav?.navigate?.(route);
 
         mobileOpen && setMobileOpen(false);
     };
 
     // TODO: Grab routes based on user role
-    const AuthorizedUserRoutes = () => {
-        if (auth && auth.user) {
-            let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role.toLowerCase() as "student" | "preceptor" | "admin"];
+    // const AuthorizedUserRoutes = () => {
+    //     if (auth && auth.user) {
+    //         let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role?.toLowerCase() as "student" | "preceptor" | "admin"];
 
-            return (
-                <List>
-                    {Object.keys(userRoutes).map((key, index) => {
-                        let route = userRoutes[key];
+    //         return (
+    //             <List>
+    //                 {Object.values(userRoutes).slice(1).filter(r => r.navigable || r.navigable === undefined).map((route, index) => {
+    //                     return (
+    //                         <ListItem button key={index} onClick={() => handleNavigate(route)}>
+    //                             {route.icon &&
+    //                                 <ListItemIcon>
+    //                                     <route.icon />
+    //                                 </ListItemIcon>
+    //                             }
+    //                             <ListItemText primary={route.label ?? route.path} />
+    //                         </ListItem>
+    //                     );
+    //                 })}
+    //                 <ListItem button onClick={() => auth.signOut()}>
+    //                     <ListItemIcon>
+    //                         <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
+    //                     </ListItemIcon>
+    //                     <ListItemText primary={"Logout"} />
+    //                 </ListItem>
+    //             </List >
+    //         );
+    //     }
 
-                        return (
-                            <ListItem button key={index} onClick={() => handleNavigate(route.path)}>
-                                {route.icon &&
-                                    <ListItemIcon>
-                                        {route.icon}
-                                    </ListItemIcon>
-                                }
-                                <ListItemText primary={route.path} />
-                            </ListItem>
-                        );
-                    })}
-                    <ListItem button onClick={() => auth.signOut()}>
-                        <ListItemIcon>
-                            <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
-                        </ListItemIcon>
-                        <ListItemText primary={"Logout"} />
-                    </ListItem>
-                </List >
-            );
-        }
-
-        return <React.Fragment />;
-    };
+    //     return <React.Fragment />;
+    // };
 
     return (
         <div className={classes.root}>
@@ -108,6 +110,9 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                             <Menu />
                         </IconButton>
                     </Hidden>
+                    <Typography variant={"h6"} color={"primary"}>
+                        {nav?.navHeader}
+                    </Typography>
                 </Toolbar>
             </StyledAppBar>
             <nav className={classes.drawer}>
@@ -121,7 +126,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                             keepMounted: true,
                         }}
                     >
-                        <AuthorizedUserRoutes />
+                        {/* <AuthorizedUserRoutes /> */}
                     </Sidebar>
                 </Hidden>
                 <Hidden xsDown implementation="css">
@@ -132,7 +137,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                         onClose={() => { }}
                     >
                         <Toolbar />
-                        <AuthorizedUserRoutes />
+                        {/* <AuthorizedUserRoutes /> */}
                     </Sidebar>
                 </Hidden>
             </nav>

@@ -11,6 +11,8 @@ import { grey, lightBlue } from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import { NavContextProvider } from './components/context/nav';
 import { AuthContextProvider } from './components/context/auth';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
@@ -56,17 +58,19 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <ThemeProvider theme={responsiveFontSizes(theme)}>
-          <NavContextProvider>
-            <AuthContextProvider>
-              <App />
-            </AuthContextProvider>
-          </NavContextProvider>
-        </ThemeProvider>
-      </MuiPickersUtilsProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <ThemeProvider theme={responsiveFontSizes(theme)}>
+            <NavContextProvider>
+              <AuthContextProvider>
+                <App />
+              </AuthContextProvider>
+            </NavContextProvider>
+          </ThemeProvider>
+        </MuiPickersUtilsProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
