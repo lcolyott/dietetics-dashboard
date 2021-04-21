@@ -1,10 +1,11 @@
 import React, { Component, useEffect } from "react";
-import { Button, Container, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Toolbar, Typography, Switch as MSwitch } from "@material-ui/core";
+import { Button, Container, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Toolbar, Typography, Switch as MSwitch, Divider } from "@material-ui/core";
 import { ApplicationUser } from "../../data/models";
 import { routes, userRoles, UserRoles } from "../../data/authorization";
-import { StyledTextField } from "../../components/input";
+import { StyledInput, StyledTextField } from "../../components/input";
 import { Switch, useHistory, useParams } from "react-router-dom";
 import { testUsers } from "../../data/test";
+import { DatePicker } from "@material-ui/pickers";
 
 interface AddUserProps {
     onAddUser: () => void;
@@ -15,30 +16,29 @@ const AddUser: React.FunctionComponent<AddUserProps> = (props) => {
     const [showPreceptorInput, setShowPreceptorInput] = React.useState<boolean>(false);
 
     return (
-        <React.Fragment>
-            <Container>
-                <StyledTextField label={"Name"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField label={"Email"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField label={"Phone"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField
+        <form>
+            <Container style={{ display: "flex", flexDirection: "column", rowGap: ".75rem", paddingTop: "1rem" }}>
+                <StyledInput required label={"Name"} fullWidth />
+                <StyledInput required label={"Email"} fullWidth />
+                <StyledInput required label={"Phone"} fullWidth />
+                <StyledInput
+                    required
                     select
                     SelectProps={{ MenuProps: { variant: "menu" } }}
                     label={"Role"}
                     fullWidth
-                    margin={"dense"}
-                    variant={"outlined"}
                 >
                     {userRoles.all.map((role, index) => (
                         <MenuItem value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</MenuItem>
                     ))}
-                </StyledTextField>
+                </StyledInput>
             </Container>
-            <Toolbar style={{ justifyContent: "right" }}>
-                <Button variant={"outlined"} color={"primary"} onClick={onAddUser}>
+            <Toolbar style={{ justifyContent: "flex-end" }}>
+                <Button type={"submit"} variant={"outlined"} color={"primary"}>
                     Create User
                 </Button>
             </Toolbar>
-        </React.Fragment>
+        </form>
     );
 }
 
@@ -111,6 +111,7 @@ const Users: React.FunctionComponent<any> = (props) => {
                     {showTable ? ("Add User") : ("Back to List")}
                 </Button>
             </Toolbar>
+            <Divider variant={"middle"} />
             {showTable ? (<UsersTable onSelectUser={handleUserSelected} />) : (<AddUser onAddUser={handleAddUser} />)}
         </TableContainer>
     );
@@ -144,37 +145,47 @@ const ManageUser: React.FunctionComponent<any> = (props) => {
                     <MSwitch color={"primary"} />
                 </span>
             </Toolbar>
-            <Container>
-                <StyledTextField label={"Name"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField label={"Email"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField label={"Phone"} fullWidth margin={"dense"} variant={"outlined"} />
-                <StyledTextField
-                    select
-                    SelectProps={{ MenuProps: { variant: "menu" } }}
-                    label={"Role"}
-                    fullWidth
-                    margin={"dense"}
-                    variant={"outlined"}
-                >
-                    {userRoles.all.map((role, index) => (
-                        <MenuItem value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</MenuItem>
-                    ))}
-                </StyledTextField>
-                {userRole === "Student" &&
-                    <StyledTextField label={"Graduation Date"} fullWidth margin={"dense"} variant={"outlined"} />
-                }
-                {userRole === "Preceptor" &&
-                    <StyledTextField select label={"Site"} fullWidth margin={"dense"} variant={"outlined"} />
-                }
-            </Container>
-            <Toolbar style={{ justifyContent: "right", columnGap: ".5rem" }}>
-                <Button variant={"outlined"} color={"primary"} onClick={handleSave}>
-                    Save
+            <Divider variant={"middle"} />
+            <form>
+                <Container style={{ display: "flex", flexDirection: "column", rowGap: ".75rem", paddingTop: "1rem" }}>
+                    <StyledInput required label={"Name"} fullWidth />
+                    <StyledInput required label={"Email"} fullWidth />
+                    <StyledInput required label={"Phone"} fullWidth />
+                    <StyledInput
+                        required
+                        select
+                        SelectProps={{ MenuProps: { variant: "menu" } }}
+                        label={"Role"}
+                        fullWidth
+                    >
+                        {userRoles.all.map((role, index) => (
+                            <MenuItem value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</MenuItem>
+                        ))}
+                    </StyledInput>
+                    {userRole === "Student" &&
+                        <DatePicker
+                            views={["year", "month", "date"]}
+                            label={"Graduation Date"}
+                            inputVariant={"outlined"}
+                            TextFieldComponent={StyledInput}
+                            format={"MM/dd/yyyy"}
+                            value={undefined}
+                            onChange={() => { }}
+                        />
+                    }
+                    {userRole === "Preceptor" &&
+                        <StyledInput select label={"Site"} fullWidth />
+                    }
+                </Container>
+                <Toolbar style={{ justifyContent: "flex-end", columnGap: ".5rem" }}>
+                    <Button type={"submit"} variant={"outlined"} color={"primary"}>
+                        Save
+                    </Button>
+                    <Button variant={"outlined"} color={"primary"} onClick={handleCancel}>
+                        Cancel
                 </Button>
-                <Button variant={"outlined"} color={"primary"} onClick={handleCancel}>
-                    Cancel
-                </Button>
-            </Toolbar>
+                </Toolbar>
+            </form>
         </Paper >
     );
 };

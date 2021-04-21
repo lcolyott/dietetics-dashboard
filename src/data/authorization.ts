@@ -1,4 +1,4 @@
-import { Dashboard, Login, Account, Users, ManageUser, Unauthorized, Scheduling, Placement } from "../views";
+import { Dashboard, Login, Account, Users, ManageUser, Unauthorized, Scheduling, Placement, Templates } from "../views";
 import Semesters from "../views/semesters";
 import Sites from "../views/sites";
 
@@ -80,6 +80,16 @@ const routes = {
             authorizedRoles: userRoles.admins,
             component: Sites
         },
+        administration: {
+            path: "/administration",
+            authorizedRoles: userRoles.admins,
+            component: Unauthorized
+        },
+        templates: {
+            path: "/templates",
+            authorizedRoles: userRoles.admins,
+            component: Templates
+        },
     } as AuthorizedRoutes,
     student: {
         account: {
@@ -111,6 +121,11 @@ const routes = {
         },
     } as AuthorizedRoutes,
     admin: {
+        administration: {
+            path: "/administration",
+            authorizedRoles: userRoles.admins,
+            component: Unauthorized
+        },
         users: {
             path: "/users",
             authorizedRoles: userRoles.admins,
@@ -130,6 +145,11 @@ const routes = {
             path: "/sites",
             authorizedRoles: userRoles.admins,
             component: Sites
+        },
+        templates: {
+            path: "/templates",
+            authorizedRoles: userRoles.admins,
+            component: Templates
         },
     } as AuthorizedRoutes,
 };

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         columnGap: ".5rem",
 
         "&.formactions": {
-            justifyContent: "right"
+            justifyContent: "flex-end"
         },
     },
 }), { name: "NDDForm-site" });
@@ -90,7 +90,7 @@ const SiteUpdateForm: React.FunctionComponent<SiteFormProps> = (props) => {
             <div className={classes.root}>
                 <Toolbar disableGutters>
                     <Typography variant={"h6"} color={"primary"}>
-                        {props.siteId !== undefined ? "Update" : "Create"} Site
+                        {props.siteId !== undefined ? "Update" : "New"} Site
                     </Typography>
                 </Toolbar>
                 <div className={classes.row}>

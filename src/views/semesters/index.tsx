@@ -6,7 +6,7 @@ import clsx from "clsx";
 import React, { useEffect } from "react";
 import { RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import { Unauthorized } from "..";
-import { StyledTextField } from "../../components/input";
+import { StyledInput, StyledTextField } from "../../components/input";
 import AuthRoute from "../../components/navigation/authroute";
 import ResponsiveTable, { StyledTableCell, StyledTableRow } from "../../components/responsiveTable";
 import { userRoles } from "../../data/authorization";
@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     content: {
         display: "flex",
         flexDirection: "column",
-        rowGap: ".5rem",
+        rowGap: ".75rem",
 
-        padding: theme.spacing(2),
+        padding: theme.spacing(4),
 
         "& .MuiTextField-root": {
             width: "25ch"
@@ -121,6 +121,7 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
         setState(newState);
     };
 
+    // TODO: Removes last index??
     const removeCourse = (index: number) => {
         let newState = { ...state };
         newState.Courses.splice(index, 1);
@@ -143,15 +144,15 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
         <Paper variant={"outlined"} className={classes.root}>
             <form>
                 <div className={classes.content}>
-                    <Typography gutterBottom variant={"h6"} color={"primary"}>
-                        Semester
+                    <Typography variant={"h6"} color={"primary"}>
+                        New Semester
                     </Typography>
+                    <Divider />
                     <div className={classes.row}>
-                        <StyledTextField
+                        <StyledInput
                             required
                             select
                             label={"Semester"}
-                            variant={"outlined"}
                             value={state.Semester.Type ?? "Spring"}
                             onChange={selectSemester}
                         >
@@ -159,14 +160,14 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                             <MenuItem value={"Summer"}>Summer</MenuItem>
                             <MenuItem value={"Fall"}>Fall</MenuItem>
                             <MenuItem value={"Winter"}>Winter</MenuItem>
-                        </StyledTextField>
+                        </StyledInput>
                         <DatePicker
                             required
                             disablePast
                             views={["year"]}
                             label={"Year"}
                             inputVariant={"outlined"}
-                            TextFieldComponent={StyledTextField}
+                            TextFieldComponent={StyledInput}
                             value={new Date(state.Semester.Year ?? 0)}
                             onChange={selectYear}
                         />
@@ -178,8 +179,8 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                             views={["year", "month", "date"]}
                             label={"Start Date"}
                             inputVariant={"outlined"}
-                            TextFieldComponent={StyledTextField}
-                            format={"MM/dd/yyyy"}
+                            TextFieldComponent={StyledInput}
+                            format={"MM/DD/yyyy"}
                             value={state.Semester.StartDate}
                             onChange={selectStartDate}
                         />
@@ -189,21 +190,22 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                             views={["year", "month", "date"]}
                             label={"Start Date"}
                             inputVariant={"outlined"}
-                            TextFieldComponent={StyledTextField}
-                            format={"MM/dd/yyyy"}
+                            TextFieldComponent={StyledInput}
+                            format={"MM/DD/yyyy"}
                             value={state.Semester.EndDate}
                             onChange={selectEndDate}
                         />
                     </div>
                 </div>
                 <div className={clsx(classes.content, classes.courseTable)}>
-                    <Typography gutterBottom variant={"h6"} color={"primary"}>
-                        Offered Courses
+                    <Typography variant={"subtitle1"} color={"textSecondary"}>
+                        Courses
                     </Typography>
+                    <Divider />
                     {state.Courses.map((course, index) => (
                         <div className={clsx(classes.courseField, classes.row)}>
-                            <StyledTextField required label={"Course Number"} variant={"outlined"} />
-                            <StyledTextField required label={"Course Description"} variant={"outlined"} />
+                            <StyledInput required label={"Course Number"} />
+                            <StyledInput required label={"Course Description"} />
                             <IconButton onClick={() => removeCourse(index)}>
                                 <Delete />
                             </IconButton>
@@ -216,7 +218,7 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                     </div>
                 </div>
                 <Toolbar disableGutters className={classes.actions}>
-                    <Button color={"primary"} variant={"outlined"} onClick={submit}>
+                    <Button type={"submit"} color={"primary"} variant={"outlined"}>
                         Submit
                     </Button>
                     <Button color={"primary"} variant={"outlined"} onClick={cancel}>

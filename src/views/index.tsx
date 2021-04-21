@@ -5,5 +5,6 @@ import Placement from "./placement";
 import Users, { ManageUser } from "./users";
 import Unauthorized from "./unauthorized";
 import Scheduling from "./scheduling";
+import Templates from "./templates";
 
-export { Account, Dashboard, Login, Placement, Users, ManageUser, Unauthorized, Scheduling };
+export { Account, Dashboard, Login, Placement, Users, ManageUser, Unauthorized, Scheduling, Templates };
