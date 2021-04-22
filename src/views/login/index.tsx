@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, createStyles, Divider, Grid, makeStyles, Paper, Theme, Typography, useTheme, withStyles } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { Button, createStyles, Divider, Grid, makeStyles, Paper, Theme, Toolbar, Typography, useTheme, withStyles } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
         width: "100%",
         height: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
 
         justifyContent: "center",
         alignItems: "center",
@@ -118,8 +120,8 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
     };
 
     // TODO:
-    const createAccount = () => {
-        onCreateAccount?.({});
+    const createAccount = (args: UserCreationArgs) => {
+        onCreateAccount?.(args);
     };
 
     // TODO:
@@ -128,40 +130,60 @@ const NewAccount: React.FunctionComponent<NewAccountProps> = (props) => {
     };
 
     return (
-        <React.Fragment>
-            <Grid item container justify={"center"}>
-                <Typography align={"center"} variant={"h6"} color={"primary"}>
-                    New Account
-                </Typography>
-            </Grid>
-            <Grid item container justify={"center"}>
-                <RoleToggle exclusive size={"large"} value={userRole} onChange={(event, value) => handleSetUserRole(value)} >
-                    <RoleButton aria-label={"student"} value={"student"}>
-                        <FontAwesomeIcon fixedWidth icon={faGraduationCap} />
-                        Student
-                    </RoleButton>
-                    <RoleButton aria-label={"preceptor"} value={"preceptor"}>
-                        <FontAwesomeIcon fixedWidth icon={faUserTie} />
-                        Preceptor
-                    </RoleButton>
-                </RoleToggle>
-            </Grid>
-            <Grid item container justify={"center"} direction={"column"}>
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Name"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Email"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Retype Password"} />
-                <StyledTextField variant={"outlined"} margin={"dense"} label={"Phone"} />
-            </Grid>
-            <Grid item container>
-                <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={createAccount}>
-                    Create Account
-                </Button>
-                <Button variant={"text"} color={"primary"} onClick={onSignIn}>
-                    Already Have An Account?
-                </Button>
-            </Grid>
-        </React.Fragment>
+        <Formik
+            initialValues={{
+                Name: "",
+                Email: "",
+                Password: "",
+                RetypePassword: "",
+                Phone: ""
+            } as UserCreationArgs}
+            onSubmit={(values) => createAccount(values)}
+        >
+            {({
+                values,
+                handleChange,
+                handleBlur,
+                handleSubmit
+            }) => (
+                <form onSubmit={handleSubmit} >
+                    <div style={{ display: "flex", flexDirection: "column", rowGap: ".75rem" }}>
+                        <Grid item container justify={"center"}>
+                            <Typography align={"center"} variant={"h6"} color={"primary"}>
+                                New Account
+                            </Typography>
+                        </Grid>
+                        <Grid item container justify={"center"}>
+                            <RoleToggle exclusive size={"large"} value={userRole} onChange={(event, value) => handleSetUserRole(value)} >
+                                <RoleButton aria-label={"student"} value={"student"}>
+                                    <FontAwesomeIcon fixedWidth icon={faGraduationCap} />
+                                    Student
+                                </RoleButton>
+                                <RoleButton aria-label={"preceptor"} value={"preceptor"}>
+                                    <FontAwesomeIcon fixedWidth icon={faUserTie} />
+                                    Preceptor
+                                </RoleButton>
+                            </RoleToggle>
+                        </Grid>
+                        <Grid item container justify={"center"} direction={"column"} style={{ rowGap: ".75rem" }}>
+                            <StyledInput required name={"Name"} label={"Name"} onBlur={handleBlur} onChange={handleChange} />
+                            <StyledInput required name={"Email"} label={"Email"} onBlur={handleBlur} onChange={handleChange} />
+                            <StyledInput required name={"Password"} label={"Password"} onBlur={handleBlur} onChange={handleChange} />
+                            <StyledInput required name={"RetypePassword"} label={"Retype Password"} onBlur={handleBlur} onChange={handleChange} />
+                            <StyledInput required name={"Phone"} label={"Phone"} onBlur={handleBlur} onChange={handleChange} />
+                        </Grid>
+                        <Grid item container>
+                            <Button fullWidth variant={"outlined"} color={"primary"} style={{ marginBottom: ".5rem" }} onClick={createAccount}>
+                                Create Account
+                            </Button>
+                            <Button variant={"text"} color={"primary"} onClick={onSignIn}>
+                                Already Have An Account?
+                            </Button>
+                        </Grid>
+                    </div>
+                </form>
+            )}
+        </Formik>
     );
 };
 
@@ -228,13 +250,21 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
     const auth = React.useContext(AuthContext);
     const nav = React.useContext(NavContext);
 
+    useEffect(() => {
+        if (auth.user) {
+            nav?.navigate?.(getDefaultRoute(auth.user.Role));
+        }
+    }, []);
+
     const signIn = (args: UserSignInArgs) => {
-        auth?.signIn(args)
+        auth?.signIn?.(args)
             .then(action => {
                 let user = action.payload;
 
                 if (user) {
-                    nav?.navigate(getDefaultRoute((user as User).Role));
+                    console.log("Navigation to default user route");
+                    console.log(getDefaultRoute((user as User).Role));
+                    nav?.navigate?.(getDefaultRoute((user as User).Role));
                 }
             })
             .catch();
@@ -274,6 +304,10 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
 
     return (
         <div className={classes.root}>
+            <Typography variant={"h2"} align={"center"} color={"primary"}>
+                Dietetics <br /> Dashboard
+            </Typography>
+            <Toolbar />
             <Paper variant={"outlined"} className={classes.card}>
                 <Grid container className={classes.content} spacing={2}>
                     {renderVisiblePane()}

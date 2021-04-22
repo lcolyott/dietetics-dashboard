@@ -4,34 +4,56 @@ import { AuthorizedRoute } from "../../../data/authorization";
 import { } from "../../../data/models";
 
 interface NavContextState {
-    navHeader?: string;
+    status: string & "Init" | "Idle" | "Navigating";
+    navHeader: string;
+    currentRoute: AuthorizedRoute;
     navigate: (to: AuthorizedRoute) => void;
 };
 
-const NavContext = React.createContext<NavContextState | undefined>(undefined);
+const NavContext = React.createContext<Partial<NavContextState>>({
+    status: "Init"
+});
 
 const NavContextProvider: React.FunctionComponent<any> = (props) => {
-    const [state, setState] = React.useState<NavContextState | undefined>(undefined);
     const history = useHistory();
+    const [state, setState] = React.useState<Partial<NavContextState>>({
+        status: "Init",
+        navHeader: undefined,
+        currentRoute: undefined,
+        navigate: (to: AuthorizedRoute): Promise<boolean> => {
+            var newState: Partial<NavContextState> = {
+                ...state,
+                status: "Navigating",
+                navHeader: to.label,
+                currentRoute: to
+            };
 
-    useEffect(() => {
-        let context: NavContextState = {
-            navigate
-        };
+            setState(newState);
 
-        setState(context);
-    }, []);
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
 
-    const navigate = (to: AuthorizedRoute) => {
-        let newState = {
-            navHeader: to.label,
-            navigate
-        };
+                    setState({
+                        ...newState,
+                        status: "Idle",
+                    });
 
-        setState(newState);
+                    if (newState.currentRoute) {
+                        history.push(newState.currentRoute.path);
+                    }
 
-        history.push(to.path);
-    };
+                    resolve(true);
+                }, 150);
+            });
+        }
+    });
+
+    // useEffect(() => {
+    //     setState({
+    //         ...state,
+    //         status: "Idle"
+    //     })
+    // }, []);
 
     return (
         <NavContext.Provider value={state}>

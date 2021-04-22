@@ -1,4 +1,4 @@
-import { AccountCircle, Apartment, Assessment, Dashboard as MDashboard, EventNote, ListAlt, MenuBook, PeopleAlt } from "@material-ui/icons";
+import { AccountCircle, Apartment, Assessment, Dashboard as MDashboard, EventNote, ListAlt, MenuBook, PeopleAlt, Schedule } from "@material-ui/icons";
 import { Dashboard, Login, Account, Users, ManageUser, Unauthorized, Scheduling, Placement, Administration, Reports, Semesters, Sites, Templates } from "../views";
 
 enum UserRoles {
@@ -82,16 +82,16 @@ const authorizedRoutes: AuthorizedRoutes = {
     scheduling: {
         path: "/scheduling",
         label: "Scheduling",
-        icon: EventNote,
+        icon: Schedule,
         authorizedRoles: userRoles.admins,
         component: Scheduling
     },
     semesters: {
         path: "/semesters",
         label: "Semesters",
+        icon: EventNote,
         authorizedRoles: userRoles.admins,
         component: Semesters,
-        navigable: false,
     },
     sites: {
         path: "/sites",
