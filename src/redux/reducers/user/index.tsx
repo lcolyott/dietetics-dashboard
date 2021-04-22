@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { signIn, signOut } from "../../../data/API/session";
 import { UserSignInArgs } from "../../../data/events";
 import { Contact, Site, User } from "../../../data/models";
+import { RootState } from "../../store";
 
 interface UserState {
     status: "Idle" | "Loading";
@@ -14,6 +15,14 @@ interface UserState {
 
 const initialState: UserState = {
     status: "Idle",
+    user: process.env.NODE_ENV === "development" ?
+        (sessionStorage.getItem("testuser") ?
+            JSON.parse(sessionStorage.getItem("testuser") as string) as User
+            :
+            undefined
+        )
+        :
+        undefined
 };
 
 // Async sign in function
@@ -100,12 +109,8 @@ const userSlice = createSlice({
     }
 });
 
-function mapState(state: UserState) {
-    const { status, user, userRole, contact, site } = state;
-
-    return {
-        status, user, userRole, contact, site
-    };
+function mapState(state: RootState) {
+    return { ...state.userReducer }
 };
 
 const mapDispatch = {
@@ -117,4 +122,5 @@ const userStateConnector = connect(mapState);
 const userConnector = connect(mapState, mapDispatch);
 
 export { userConnector, userStateConnector };
+export type { UserState };
 export default userSlice.reducer;

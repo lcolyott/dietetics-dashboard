@@ -5,7 +5,7 @@ import userReducer from "../reducers/user";
 // Read more about configureStore {@link https://redux-toolkit.js.org/api/configureStore}
 const store = configureStore({
     reducer: {
-        user: userReducer
+        userReducer
     }
 });
 

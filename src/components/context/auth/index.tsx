@@ -9,7 +9,9 @@ import NavContext from "../nav";
 
 interface AuthContextState extends ConnectedProps<typeof userConnector> { };
 
-const AuthContext = React.createContext<AuthContextState | undefined>(undefined);
+const AuthContext = React.createContext<Partial<AuthContextState>>({
+    status: "Idle"
+});
 
 const ACP: React.FunctionComponent<AuthContextState> = (props) => {
     return (
