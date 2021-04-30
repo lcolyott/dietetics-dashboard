@@ -1,145 +1,153 @@
-import { Button } from "@material-ui/core";
+import { Button, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { bind } from "lodash";
 import React, { useEffect } from "react";
 import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { WithOptional } from "../../utilities/types";
+import Toolbox from "./toolbox";
 import { TemplateItem, RootTemplateItem, LayoutTemplateItem, FormatTemplateItem, WidgetTemplateItem, TemplateItemType } from "./widgets";
-import { mapItemToComponent } from "./widgets/components";
+import { TemplateComponents } from "./widgets/data";
+import { mapItemToComponent } from "./widgets/logic";
 
-const dummyTemplate: TemplateItem = {
-    id: "root",
-    type: "ROOT",
-    component: "ROOT",
-    children: [
-        {
-            id: "0",
-            type: "LAYOUT",
-            component: "LAYOUT",
-            direction: "column",
-            children: [
-                {
-                    id: "2",
-                    type: "WIDGET",
-                    component: "TEST"
-                },
-                {
-                    id: "3",
-                    type: "WIDGET",
-                    component: "TEST"
-                },
-                {
-                    id: "4",
-                    type: "WIDGET",
-                    component: "TEST"
-                },
-            ]
-        },
-        {
-            id: "1",
-            type: "LAYOUT",
-            component: "LAYOUT",
-            direction: "row",
-            children: [
-                {
-                    id: "5",
-                    type: "WIDGET",
-                    component: "TEST"
-                },
-                {
-                    id: "6",
-                    type: "WIDGET",
-                    component: "TEST"
-                },
-            ]
-        },
-    ]
-};
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        display: "flex",
+        flexDirection: "row",
+        gap: "1rem",
+    },
+}), { name: "NDDTemplateBuilder" });
 
 interface TemplateBuilderProps {
 
 };
 
 interface TemplateBuilderState {
-
+    root: TemplateItem;
+    count: number;
 };
 
-const TemplateBuilder: React.FunctionComponent<TemplateBuilderProps> = (props) => {
-    const [state, setState] = React.useState<RootTemplateItem>(dummyTemplate);
+function TemplateBuilderContainer(props: any) {
+    const classes = useStyles();
 
-    // Mounted
-    useEffect(() => {
+    return (
+        <div className={classes.root}>
+            {props.children}
+        </div>
+    );
+}
 
-    }, [])
-
-    const renderItem = (item: TemplateItem) => {
-        function renderChildren(item: TemplateItem) {
-            if (item.children) {
-                return (
-                    <React.Fragment>
-                        {item.children.map((item, index) => renderItem(item))}
-                    </React.Fragment>
-                );
-            }
+class TemplateBuilder extends React.PureComponent<TemplateBuilderProps, TemplateBuilderState> {
+    constructor(props: TemplateBuilderProps) {
+        super(props);
+        this.state = {
+            root: {
+                id: "ROOT",
+                type: "ROOT",
+                component: "ROOT"
+            },
+            count: 0
         };
 
+        this.renderItem = this.renderItem.bind(this);
+
+        this.addItem = this.addItem.bind(this);
+        this.removeItem = this.removeItem.bind(this);
+        this.moveItem = this.moveItem.bind(this);
+        this.removeAllItems = this.removeAllItems.bind(this);
+
+        this.handleDrop = this.handleDrop.bind(this);
+    };
+
+    //#region Component Lifecycle Callbacks
+    componentDidMount() { };
+    componentDidUpdate() { };
+    componentWillUnmount() { };
+    //#endregion
+
+    //#region Render Methods
+    /** Recursivles render the template */
+    renderItem = (item: TemplateItem) => {
         let Component = mapItemToComponent(item);
 
         return (
-            <Component key={item.id} {...item}>
-                {renderChildren(item)}
+            <Component key={item.id} onDrop={this.handleDrop} item={item}>
+                {item.children?.map((child, index) => this.renderItem(child))}
             </Component>
         );
     };
+    //#endregion
 
-    const renderTemplate = (root: RootTemplateItem) => {
-        return renderItem(root);
-    };
-
+    //#region State Methods
     /** Add an item to the JSON string */
-    const addItem = (parentId: string, type: TemplateItemType) => {
+    addItem = (parentId: string, item: WithOptional<TemplateItem, "id">) => {
+        let root = JSON.parse(JSON.stringify(this.state.root, (key, value: TemplateItem) => {
+            if (value.id === parentId) {
 
-    };
+                let newItem = { ...item };
+                newItem.id = this.state.count.toString();
 
-    /** Move an item from one item to another */
-    const moveItem = (itemId: string, newParentId: string) => {
-        function getItem(itemId: string): TemplateItem {
-            return JSON.parse(
-                JSON.stringify(state, (key, value: TemplateItem) => {
-                    if (value.id === itemId) {
-                        return value;
-                    }
-                    return "";
-                })
-            ) as TemplateItem;
-        };
+                console.log(this.state.count, value, item, newItem);
 
-        let item = getItem(itemId);
+                value.children?.push(newItem as TemplateItem) ?? (
+                    value.children = [newItem as TemplateItem]
+                );
+            }
 
-        // Remove item from state
-        removeItem(itemId);
+            return value;
+        })) as TemplateItem;
 
-        // Add to new parent element
+        let newCount = this.state.count + 1;
+
+        this.setState({
+            root,
+            count: newCount
+        });
     };
 
     /** Remove an item from state by converting it to a JSON string, using the "replacer" function in JSON.stringify to remove the matching element, then reconverting it into TemplateItems */
-    const removeItem = (id: string | undefined) => {
-        setState(
-            JSON.parse(
-                JSON.stringify(state, (key, value: TemplateItem) => {
-                    if (value.id !== id) {
+    removeItem = (itemId: string) => {
+        this.setState({
+            root: JSON.parse(
+                JSON.stringify(this.state.root, (key, value: TemplateItem) => {
+                    if (value.id !== itemId) {
                         return value;
                     }
+
+                    console.log(value);
 
                     return "";
                 })
             )
-        );
+        });
+    };
+
+    /** Move an item from one item to another */
+    moveItem = (item: TemplateItem, parent: TemplateItem) => {
+        this.removeItem(item.id);
+
+        let root = JSON.parse(JSON.stringify(this.state.root, (key, value: TemplateItem) => {
+            if (value.id === parent.id) {
+
+                value.children?.push(item) ?? (
+                    value.children = [item]
+                );
+            }
+
+            return value;
+        })) as TemplateItem;
+
+        let newCount = this.state.count + 1;
+
+        this.setState({
+            root,
+        });
     };
 
     /** Remove all items of type */
-    const removeItemsByType = (type: TemplateItemType) => {
-        setState(
-            JSON.parse(
-                JSON.stringify(state, (key, value: TemplateItem) => {
+    removeItemsByType = (type: TemplateItemType) => {
+        this.setState({
+            root: JSON.parse(
+                JSON.stringify(this.state.root, (key, value: TemplateItem) => {
                     if (value.type === type) {
                         return "";
                     }
@@ -147,23 +155,44 @@ const TemplateBuilder: React.FunctionComponent<TemplateBuilderProps> = (props) =
                     return value;
                 })
             )
+        });
+    };
+
+    removeAllItems = () => {
+        let newRoot = this.state.root;
+        newRoot.children = [];
+
+        this.setState({
+            root: newRoot,
+            count: 0
+        });
+    };
+    //#endregion
+
+    //#region Drag and Drop Methods
+    handleDrop = (droppedItem: WithOptional<TemplateItem, "id">, newParent: TemplateItem) => {
+        if (droppedItem.id === "NEW") {
+            this.addItem(newParent.id, droppedItem);
+        }
+        else {
+            this.moveItem(droppedItem as TemplateItem, newParent);
+        }
+    };
+    //#endregion
+
+    render() {
+        return (
+            <DndProvider backend={HTML5Backend} >
+                <TemplateBuilderContainer>
+                    {this.renderItem(this.state.root)}
+                    <Toolbox />
+                    <Button variant={"outlined"} color={"primary"} onClick={this.removeAllItems}>
+                        Clear
+                    </Button>
+                </TemplateBuilderContainer>
+            </DndProvider>
         );
     }
-
-    return (
-        <DndProvider backend={HTML5Backend}>
-            {renderTemplate(state)}
-            <Button onClick={() => removeItemsByType("WIDGET")} variant={"contained"}>
-                Remove all widgets
-            </Button>
-            <Button onClick={() => moveItem("0", "1")} variant={"contained"}>
-                Move widget to row
-            </Button>
-            <Button onClick={() => addItem("0", "WIDGET")} variant={"contained"}>
-                Add widget to column
-            </Button>
-        </DndProvider>
-    );
 };
 
 export default TemplateBuilder;

@@ -55,7 +55,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     const nav = useContext(NavContext);
 
     useEffect(() => {
-        console.log(auth);
+        
     }, [auth])
 
     const handleDrawerToggle = () => {

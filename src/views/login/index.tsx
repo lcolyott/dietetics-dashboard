@@ -262,8 +262,6 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
                 let user = action.payload;
 
                 if (user) {
-                    console.log("Navigation to default user route");
-                    console.log(getDefaultRoute((user as User).Role));
                     nav?.navigate?.(getDefaultRoute((user as User).Role));
                 }
             })

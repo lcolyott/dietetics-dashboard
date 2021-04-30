@@ -1,5 +1,6 @@
 import React from "react";
 import { RootTemplateItem, TemplateItem } from ".";
+import { WithOptional } from "../../../utilities/types";
 import { TemplateItemComponentMap } from "./data";
 
 /** Convert a tree of template items into a JSON string */
@@ -12,4 +13,14 @@ function fromJSON(data: string) {
     console.log("fromJSON");
 };
 
-export { toJSON, fromJSON };
+/** Return the component defined by the TemplateItem */
+function mapItemToComponent(templateItem: TemplateItem) {
+    if (templateItem.type && templateItem.component) {
+        return TemplateItemComponentMap[templateItem.type][templateItem.component];
+
+    }
+
+    return React.Fragment;
+};
+
+export { toJSON, fromJSON, mapItemToComponent };

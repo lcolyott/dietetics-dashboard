@@ -4,28 +4,28 @@ import { CSSProperties } from "react";
 type TemplateItemType = "ROOT" | "LAYOUT" | "FORMAT" | "WIDGET";
 
 interface BaseTemplateItem {
-    id?: string;
-    component?: string;
+    id: string;
+    component: string;
     children?: TemplateItem[];
 };
 
 interface RootTemplateItem extends Omit<BaseTemplateItem, "component"> {
-    component?: "ROOT";
-    type?: (TemplateItemType & "ROOT");
+    component: "ROOT";
+    type: (TemplateItemType & "ROOT");
 };
 
 interface LayoutTemplateItem extends Omit<BaseTemplateItem, "component"> {
-    component?: "LAYOUT";
-    type?: (TemplateItemType & "LAYOUT");
-    direction?: "row" | "column",
+    component: "LAYOUT";
+    type: (TemplateItemType & "LAYOUT");
+    direction: "row" | "column",
 };
 
 interface FormatTemplateItem extends BaseTemplateItem {
-    type?: (TemplateItemType & "FORMAT");
+    type: (TemplateItemType & "FORMAT");
 };
 
 interface WidgetTemplateItem extends BaseTemplateItem {
-    type?: (TemplateItemType & "WIDGET");
+    type: (TemplateItemType & "WIDGET");
 };
 
 type TemplateItem =
