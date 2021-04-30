@@ -51,52 +51,10 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
     const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
 
     const classes = useStyles();
-    const auth = useContext(AuthContext);
     const nav = useContext(NavContext);
-
-    useEffect(() => {
-        
-    }, [auth])
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
-    };
-
-    const handleNavigate = (route: AuthorizedRoute) => {
-        nav?.navigate?.(route);
-
-        mobileOpen && setMobileOpen(false);
-    };
-
-    const AuthorizedUserRoutes = () => {
-        if (auth && auth.user) {
-            let userRoutes: AuthorizedRoutes = routes[auth?.user?.Role.toLowerCase() as "student" | "preceptor" | "admin"];
-
-            return (
-                <List>
-                    {Object.values(userRoutes).slice(1).filter(r => r.navigable || r.navigable === undefined).map((route, index) => {
-                        return (
-                            <ListItem button key={index} onClick={() => handleNavigate(route)}>
-                                {route.icon &&
-                                    <ListItemIcon>
-                                        <route.icon />
-                                    </ListItemIcon>
-                                }
-                                <ListItemText primary={route.label ?? route.path} />
-                            </ListItem>
-                        );
-                    })}
-                    <ListItem button onClick={auth?.signOut}>
-                        <ListItemIcon>
-                            <FontAwesomeIcon icon={faSignOutAlt} size={"2x"} />
-                        </ListItemIcon>
-                        <ListItemText primary={"Logout"} />
-                    </ListItem>
-                </List >
-            );
-        }
-
-        return <React.Fragment />;
     };
 
     return (
@@ -124,9 +82,7 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                         ModalProps={{
                             keepMounted: true,
                         }}
-                    >
-                        <AuthorizedUserRoutes />
-                    </Sidebar>
+                    />
                 </Hidden>
                 <Hidden xsDown implementation="css">
                     <Sidebar
@@ -136,7 +92,6 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                         onClose={() => { }}
                     >
                         <Toolbar />
-                        <AuthorizedUserRoutes />
                     </Sidebar>
                 </Hidden>
             </nav>
