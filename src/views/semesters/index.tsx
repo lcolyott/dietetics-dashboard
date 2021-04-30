@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
+// TODO: Move semester form to its own component outside of the view
+// TODO: Add Formik
 interface SemesterForm {
     Semester: {
         Id?: number;
@@ -143,11 +145,13 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
     return (
         <Paper variant={"outlined"} className={classes.root}>
             <form>
-                <div className={classes.content}>
+                <Toolbar>
                     <Typography variant={"h6"} color={"primary"}>
                         New Semester
                     </Typography>
-                    <Divider />
+                </Toolbar>
+                <Divider variant={"middle"} />
+                <div className={classes.content}>
                     <div className={classes.row}>
                         <StyledInput
                             required
@@ -176,6 +180,7 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                         <DatePicker
                             required
                             disablePast
+                            minDate={state.Semester.Year}
                             views={["year", "month", "date"]}
                             label={"Start Date"}
                             inputVariant={"outlined"}
@@ -187,6 +192,7 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                         <DatePicker
                             required
                             disablePast
+                            minDate={state.Semester.Year}
                             views={["year", "month", "date"]}
                             label={"Start Date"}
                             inputVariant={"outlined"}
@@ -196,8 +202,6 @@ const SemesterForm: React.FunctionComponent<RouteComponentProps> = (props) => {
                             onChange={selectEndDate}
                         />
                     </div>
-                </div>
-                <div className={clsx(classes.content, classes.courseTable)}>
                     <Typography variant={"subtitle1"} color={"textSecondary"}>
                         Courses
                     </Typography>

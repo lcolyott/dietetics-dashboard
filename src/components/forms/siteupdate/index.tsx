@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         flexDirection: "column",
         rowGap: ".75rem",
 
-        paddingTop: "0 !important",
         padding: theme.spacing(2, 6),
 
         "& .organization": {
@@ -87,12 +86,13 @@ const SiteUpdateForm: React.FunctionComponent<SiteFormProps> = (props) => {
 
     return (
         <form onSubmit={submit}>
+            <Toolbar>
+                <Typography variant={"h6"} color={"primary"}>
+                    {props.siteId !== undefined ? "Update" : "New"} Site
+                </Typography>
+            </Toolbar>
+            <Divider variant={"middle"} />
             <div className={classes.root}>
-                <Toolbar disableGutters>
-                    <Typography variant={"h6"} color={"primary"}>
-                        {props.siteId !== undefined ? "Update" : "New"} Site
-                    </Typography>
-                </Toolbar>
                 <div className={classes.row}>
                     <Typography variant={"subtitle1"} color={"textSecondary"}>
                         Site Info
