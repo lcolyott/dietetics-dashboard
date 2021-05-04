@@ -1,6 +1,8 @@
+import { Dashboard, IndeterminateCheckBox, ViewColumn, ViewStream } from "@material-ui/icons";
 import React from "react";
 import { TemplateItem, TemplateItemType, WidgetTemplateItem, LayoutTemplateItem, FormatTemplateItem } from ".";
 import { WithOptional } from "../../../utilities/types";
+import { ToolboxItem } from "../toolbox";
 import { Format, Layout, Root, Widget } from "./components";
 
 const TemplateItemComponentMap: Record<TemplateItemType, Record<string, any>> = {
@@ -11,7 +13,7 @@ const TemplateItemComponentMap: Record<TemplateItemType, Record<string, any>> = 
         "LAYOUT": Layout
     },
     "FORMAT": {
-        "HEADER": Format
+        "H1": Format
     },
     "WIDGET": {
         "TEST": Widget
@@ -49,12 +51,58 @@ const TemplateWidgetComponents: Record<string, WithOptional<WidgetTemplateItem, 
     }
 };
 
-
-
 const TemplateComponents: Record<string, Record<string, WithOptional<TemplateItem, "id">>> = {
     "LAYOUT": { ...TemplateLayoutComponents },
     "FORMAT": { ...TemplateFormatComponents },
     "WIDGETS": { ...TemplateWidgetComponents },
 };
 
-export { TemplateItemComponentMap, TemplateWidgetComponents, TemplateLayoutComponents, TemplateComponents };
+const ToolboxItems: Record<string, Record<string, ToolboxItem>> = {
+    "LAYOUT": {
+        "ROW": {
+            item: {
+                id: "NEW",
+                component: "LAYOUT",
+                type: "LAYOUT",
+                direction: "row"
+            } as LayoutTemplateItem,
+            label: "Row",
+            Icon: ViewStream
+        },
+        "COLUMN": {
+            item: {
+                id: "NEW",
+                component: "LAYOUT",
+                type: "LAYOUT",
+                direction: "column"
+            } as LayoutTemplateItem,
+            label: "Row",
+            Icon: ViewColumn
+        }
+    },
+    "FORMAT": {
+        "H1": {
+            item: {
+                id: "NEW",
+                component: "H1",
+                type: "FORMAT",
+                variant: "h1"
+            } as FormatTemplateItem,
+            label: "Header 1",
+        }
+    },
+    "WIDGETS": {
+        "TEST": {
+            item: {
+                id: "NEW",
+                component: "TEST",
+                type: "WIDGET",
+            } as WidgetTemplateItem,
+            label: "Widget",
+            Icon: IndeterminateCheckBox
+        }
+
+    }
+};
+
+export { TemplateItemComponentMap, TemplateWidgetComponents, TemplateLayoutComponents, TemplateComponents, ToolboxItems };

@@ -1,4 +1,5 @@
-import { Button, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Button, createStyles, Divider, Grid, Hidden, makeStyles, Paper, Theme, Toolbar, Typography, withStyles, WithStyles } from "@material-ui/core";
+import clsx from "clsx";
 import { bind } from "lodash";
 import React, { useEffect } from "react";
 import { DndProvider, useDrop } from "react-dnd";
@@ -9,15 +10,64 @@ import { TemplateItem, RootTemplateItem, LayoutTemplateItem, FormatTemplateItem,
 import { TemplateComponents } from "./widgets/data";
 import { mapItemToComponent } from "./widgets/logic";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const styles = (theme: Theme) => createStyles({
     root: {
-        display: "flex",
-        flexDirection: "row",
-        gap: "1rem",
-    },
-}), { name: "NDDTemplateBuilder" });
+        display: "grid",
 
-interface TemplateBuilderProps {
+        [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: "auto",
+            gridTemplateRows: "calc(100% - 6rem) 5rem",
+            gridTemplateAreas: `
+            "template"
+            "actions"
+            `,
+        },
+        [theme.breakpoints.up('md')]: {
+            gridTemplateColumns: "auto 17.5rem",
+            gridTemplateRows: "calc(100% - 6rem) 5rem",
+            gridTemplateAreas: `
+            "template toolbox"
+            "actions actions"
+            `,
+        },
+
+        gap: "1rem",
+
+        height: "100%",
+        maxHeight: "100%",
+    },
+    templateEditor: {
+        display: "flex",
+        flexDirection: "column",
+
+        "& .header": {
+
+        },
+        "& .content": {
+            padding: theme.spacing(2),
+            flex: "1 1",
+
+            overflow: "hidden",
+        }
+    },
+    actions: {
+        display: "flex",
+        alignContent: "center",
+        justifyContent: "flex-end",
+        gap: "1rem",
+
+        gridArea: "actions",
+
+        padding: "1rem",
+
+        "& > *": {
+            flex: "0 1 20ch"
+        }
+
+    }
+});
+
+interface TemplateBuilderProps extends WithStyles<typeof styles> {
 
 };
 
@@ -25,16 +75,6 @@ interface TemplateBuilderState {
     root: TemplateItem;
     count: number;
 };
-
-function TemplateBuilderContainer(props: any) {
-    const classes = useStyles();
-
-    return (
-        <div className={classes.root}>
-            {props.children}
-        </div>
-    );
-}
 
 class TemplateBuilder extends React.PureComponent<TemplateBuilderProps, TemplateBuilderState> {
     constructor(props: TemplateBuilderProps) {
@@ -181,18 +221,37 @@ class TemplateBuilder extends React.PureComponent<TemplateBuilderProps, Template
     //#endregion
 
     render() {
+        const { classes } = this.props;
+
         return (
-            <DndProvider backend={HTML5Backend} >
-                <TemplateBuilderContainer>
-                    {this.renderItem(this.state.root)}
-                    <Toolbox />
-                    <Button variant={"outlined"} color={"primary"} onClick={this.removeAllItems}>
-                        Clear
-                    </Button>
-                </TemplateBuilderContainer>
+            <DndProvider backend={HTML5Backend}>
+                <div className={classes.root}>
+                    <Paper variant={"outlined"} className={classes.templateEditor}>
+                        <Toolbar className={"header"}>
+                            <Typography variant={"h4"} color={"primary"}>
+                                New Template
+                            </Typography>
+                        </Toolbar>
+                        <Divider variant={"middle"} />
+                        <div className={"content"}>
+                            {this.renderItem(this.state.root)}
+                        </div>
+                    </Paper>
+                    <Hidden smDown>
+                        <Toolbox />
+                    </Hidden>
+                    <Paper variant={"outlined"} className={classes.actions}>
+                        <Button variant={"outlined"} color={"primary"} onClick={this.removeAllItems}>
+                            Save
+                        </Button>
+                        <Button variant={"outlined"} color={"primary"} onClick={this.removeAllItems}>
+                            Clear
+                        </Button>
+                    </Paper>
+                </div>
             </DndProvider>
         );
     }
 };
 
-export default TemplateBuilder;
+export default withStyles(styles, { name: "NDDTemplateBuilder" })(TemplateBuilder);

@@ -1,4 +1,4 @@
-import { createStyles, Divider, makeStyles, Paper, Theme, Toolbar, Typography } from "@material-ui/core";
+import { createStyles, Divider, makeStyles, Paper, Theme, Toolbar, Typography, TypographyVariant } from "@material-ui/core";
 import clsx from "clsx";
 import React, { useEffect } from "react";
 import { useDrag, useDrop } from "react-dnd";
@@ -6,25 +6,21 @@ import { FormatTemplateItem, LayoutTemplateItem, RootTemplateItem, TemplateItem,
 import { WithOptional } from "../../../utilities/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-    root: {
-        display: "flex",
-        flexDirection: "column",
-        flexGrow: 1,
-    },
     component: {
         border: "1px dashed " + theme.palette.divider,
     },
-    content: {
+    root: {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        flexGrow: 1,
 
         alignContent: "flex-start",
 
         padding: ".5rem",
 
+        height: "100%",
 
+        overflow: "scroll",
     },
     layout: {
         display: "flex",
@@ -119,17 +115,9 @@ const Root: React.FunctionComponent<RootProps> = (props: any) => {
     }));
 
     return (
-        <Paper variant={"outlined"} className={classes.root}>
-            <Toolbar>
-                <Typography variant={"h4"} color={"primary"}>
-                    Form Name
-                </Typography>
-            </Toolbar>
-            <Divider variant={"middle"} />
-            <div ref={dropRef} className={classes.content}>
-                {props.children}
-            </div>
-        </Paper >
+        <div ref={dropRef} className={classes.root}>
+            {props.children}
+        </div>
     );
 };
 
@@ -138,7 +126,7 @@ const Layout: React.FunctionComponent<LayoutProps> = (props) => {
     const { item, onDrop, ...rest } = props;
 
     const [{ isOver, isOverCurrent }, dropRef] = useDrop(() => ({
-        accept: ["WIDGET", "FORMAT"],
+        accept: ["WIDGET"],
         drop: (dropped: WithOptional<TemplateItem, "id">, monitor) => {
             // console.log(dropped);
             if (monitor.didDrop()) {
@@ -154,7 +142,7 @@ const Layout: React.FunctionComponent<LayoutProps> = (props) => {
     }));
 
     return (
-        <div ref={dropRef} className={clsx(classes.layout, item.direction === "column" ? "column" : "row")}>
+        <div ref={dropRef} className={clsx(classes.layout, item.direction === "column" ? "column" : "row", classes.component)}>
             {props.children}
         </div>
     );
@@ -170,8 +158,10 @@ const Format: React.FunctionComponent<FormatProps> = (props) => {
     }));
 
     return (
-        <div ref={dragRef} className={classes.format}>
-            FORMAT {item.id}
+        <div ref={dragRef} className={clsx(classes.component, classes.format)}>
+            <Typography variant={item.variant}>
+                HEADER
+            </Typography>
             {props.children}
         </div>
     );
@@ -187,7 +177,7 @@ const Widget: React.FunctionComponent<WidgetProps> = (props) => {
     }));
 
     return (
-        <div ref={dragRef} className={classes.widget}>
+        <div ref={dragRef} className={clsx(classes.component, classes.widget)}>
             WIDGET {item.id}
             {props.children}
         </div>

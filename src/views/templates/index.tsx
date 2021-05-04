@@ -8,9 +8,7 @@ interface TemplatesProps extends RouteComponentProps {
 
 const Templates: React.FunctionComponent<TemplatesProps> = (props) => {
     return (
-        <div>
-            <TemplateBuilder />
-        </div>
+        <TemplateBuilder />
     );
 };
 

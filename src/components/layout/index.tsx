@@ -24,17 +24,26 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         },
     },
     toolbar: theme.mixins.toolbar,
-    content: {
+    contentContainer: {
+        display: "flex",
+        flexDirection: "column",
         flexGrow: 1,
-        padding: theme.spacing(2),
-        overflow: "scroll",
 
+        padding: "0",
+
+        overflow: "hidden",
+    },
+    content: {
+        flexBasis: "100%",
+        padding: theme.spacing(2),
+
+        overflowY: "scroll",
         msOverflowStyle: "none",
         scrollbarWidth: "none",
         "&::-webkit-scrollbar": {
             display: "none",
         },
-    }
+    },
 }));
 
 const StyledAppBar = withStyles((theme: Theme) => createStyles({
@@ -95,9 +104,11 @@ const AppLayout: React.FunctionComponent<any> = (props) => {
                     </Sidebar>
                 </Hidden>
             </nav>
-            <Container className={classes.content}>
+            <Container className={classes.contentContainer}>
                 <Toolbar />
-                {props.children}
+                <div className={classes.content}>
+                    {props.children}
+                </div>
             </Container>
         </div >
     );

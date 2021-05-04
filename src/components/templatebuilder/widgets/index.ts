@@ -1,3 +1,4 @@
+import { TypographyVariant } from "@material-ui/core";
 import { CSSProperties } from "react";
 
 // TODO: Create map between widget types and strings
@@ -22,6 +23,7 @@ interface LayoutTemplateItem extends Omit<BaseTemplateItem, "component"> {
 
 interface FormatTemplateItem extends BaseTemplateItem {
     type: (TemplateItemType & "FORMAT");
+    variant?: TypographyVariant;
 };
 
 interface WidgetTemplateItem extends BaseTemplateItem {
