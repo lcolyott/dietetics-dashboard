@@ -86,7 +86,7 @@ const ToolboxItems: Record<string, Record<string, ToolboxItem>> = {
                 id: "NEW",
                 component: "H1",
                 type: "FORMAT",
-                variant: "h1"
+                variant: "h6"
             } as FormatTemplateItem,
             label: "Header 1",
         }

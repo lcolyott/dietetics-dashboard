@@ -7,7 +7,13 @@ import { WithOptional } from "../../../utilities/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     component: {
+        position: "relative",
+
         border: "1px dashed " + theme.palette.divider,
+
+        "&:hover > $deleteButton": {
+            opacity: 1,
+        }
     },
     root: {
         display: "flex",
@@ -67,6 +73,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         "&:hover": {
             backgroundColor: "rgba(175, 255, 255, .5)",
         }
+    },
+    deleteButton: {
+        zIndex: 100,
+        position: "absolute",
+        top: 0,
+        right: 0,
+
+        width: "20px",
+        height: "20px",
+
+        backgroundColor: "red",
+
+        opacity: 0,
+
+        transition: "opacity .3s",
     }
 }));
 
@@ -90,6 +111,11 @@ interface FormatProps extends Omit<BaseTemplateComponentProps, "item"> {
 interface WidgetProps extends Omit<BaseTemplateComponentProps, "item"> {
     item: WidgetTemplateItem;
 };
+
+type TemplateComponentProps = RootProps
+    | LayoutProps
+    | FormatProps
+    | WidgetProps;
 
 // TODO: Make base component HOC that has delete, move, and edit operations
 // TODO: Make base "drop component" HOC that takes acceptable item types
