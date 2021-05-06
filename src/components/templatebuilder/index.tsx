@@ -6,9 +6,9 @@ import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { WithOptional } from "../../utilities/types";
 import Toolbox from "./toolbox";
-import { TemplateItem, RootTemplateItem, LayoutTemplateItem, FormatTemplateItem, WidgetTemplateItem, TemplateItemType } from "./widgets";
-import { TemplateComponents } from "./widgets/data";
-import { mapItemToComponent } from "./widgets/logic";
+import { TemplateItem, RootTemplateItem, LayoutTemplateItem, FormatTemplateItem, WidgetTemplateItem, TemplateItemType } from "./components/widgets";
+import { TemplateComponents } from "./components/widgets/data";
+import { mapItemToComponent } from "./components/widgets/logic";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -105,7 +105,7 @@ class TemplateBuilder extends React.PureComponent<TemplateBuilderProps, Template
     //#endregion
 
     //#region Render Methods
-    /** Recursivles render the template */
+    /** Recursively render the template */
     renderItem = (item: TemplateItem) => {
         let Component = mapItemToComponent(item);
 

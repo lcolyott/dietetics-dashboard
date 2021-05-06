@@ -3,8 +3,8 @@ import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { useDrag } from "react-dnd";
 import { WithOptional } from "../../../utilities/types";
-import { TemplateItem } from "../widgets";
-import { ToolboxItems } from "../widgets/data";
+import { TemplateItem } from "../components/widgets";
+import { ToolboxItems } from "../components/widgets/data";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {

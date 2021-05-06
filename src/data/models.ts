@@ -96,7 +96,7 @@ export interface ApplicationUser extends IIdentity {
     Name: string;
     Email: string;
     Phone: string;
-    Role: string & "Admin" | "Preceptor" | "Student";
+    Role: string & "Admin" | "Preceptor" | "Student" | "SuperAdmin";
 };
 
 export interface StudentUser extends ApplicationUser {

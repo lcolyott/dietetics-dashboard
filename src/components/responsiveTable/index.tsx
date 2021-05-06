@@ -1,6 +1,9 @@
 import { createStyles, Paper, Table, TableCell, TableContainer, TableProps, TableRow, Theme, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 
+// TODO: Hide specified columns on certain breakpoints
+// See: Material UI breakpoints
+
 type ResponsiveTableColumn = {
     key: string;
     label: string;
@@ -34,9 +37,6 @@ export const StyledTableCell = withStyles((theme: Theme) => createStyles({
         fontWeight: "bolder",
 
         backgroundColor: "unset",
-        border: "1px solid " + theme.palette.primary.main,
-
-        color: theme.palette.primary.main,
     }
 }))(TableCell);
 

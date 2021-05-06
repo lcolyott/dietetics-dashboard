@@ -1,7 +1,10 @@
 import { AccountCircle, Apartment, Assessment, Dashboard as MDashboard, EventNote, ListAlt, MenuBook, PeopleAlt, Schedule } from "@material-ui/icons";
 import { Dashboard, Login, Account, Users, ManageUser, Unauthorized, Scheduling, Placement, Administration, Reports, Semesters, Sites, Templates } from "../views";
 
+// Holds definitions for user roles and routes
+
 enum UserRoles {
+    superadmin = "superadmin",
     admin = "admin",
     preceptor = "preceptor",
     student = "student",
@@ -21,10 +24,10 @@ type AuthorizedRoutes = {
 };
 
 const userRoles = {
-    admins: [String(UserRoles.admin)],
+    admins: [String(UserRoles.superadmin), String(UserRoles.admin)],
     users: [String(UserRoles.preceptor), String(UserRoles.student)],
     all: [
-        String(UserRoles.admin), String(UserRoles.preceptor), String(UserRoles.student)
+        String(UserRoles.superadmin), String(UserRoles.admin), String(UserRoles.preceptor), String(UserRoles.student)
     ]
 };
 
@@ -51,12 +54,12 @@ const authorizedRoutes: AuthorizedRoutes = {
         path: "/dashboard",
         label: "Dashboard",
         icon: MDashboard,
-        authorizedRoles: userRoles.users,
+        authorizedRoles: [...userRoles.users, userRoles.admins[0]],
         component: Dashboard
     },
     placement: {
         path: "/placement/:placementId",
-        authorizedRoles: userRoles.users,
+        authorizedRoles: [...userRoles.users, userRoles.admins[0]],
         component: Placement,
     },
     administration: {
@@ -142,16 +145,22 @@ const adminRoutes: AuthorizedRoutes = {
     "reports": authorizedRoutes["reports"]
 };
 
+const superAdminRoutes: AuthorizedRoutes = {
+    default: authorizedRoutes["administration"],
+    ...authorizedRoutes
+}
+
 const routes = {
     unauthorizedRoutes,
     authorizedRoutes,
     "student": studentRoutes,
     "preceptor": preceptorRoutes,
     "admin": adminRoutes,
+    "superadmin": superAdminRoutes,
 };
 
-function getDefaultRoute(userRole: "Admin" | "Student" | "Preceptor"): AuthorizedRoute {
-    return routes[userRole.toLowerCase() as "admin" | "student" | "preceptor"]["default"];
+function getDefaultRoute(userRole: "Admin" | "Student" | "Preceptor" | "SuperAdmin"): AuthorizedRoute {
+    return routes[userRole.toLowerCase() as "admin" | "student" | "preceptor" | "superadmin"]["default"];
 };
 
 export type { AuthorizedRoute, AuthorizedRoutes };

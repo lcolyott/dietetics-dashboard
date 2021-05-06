@@ -1,6 +1,6 @@
 import React from "react";
 import { RootTemplateItem, TemplateItem } from ".";
-import { WithOptional } from "../../../utilities/types";
+import { WithOptional } from "../../../../utilities/types";
 import { TemplateItemComponentMap } from "./data";
 
 /** Convert a tree of template items into a JSON string */

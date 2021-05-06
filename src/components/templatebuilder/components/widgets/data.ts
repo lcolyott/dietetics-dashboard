@@ -1,8 +1,8 @@
 import { Dashboard, IndeterminateCheckBox, ViewColumn, ViewStream } from "@material-ui/icons";
 import React from "react";
 import { TemplateItem, TemplateItemType, WidgetTemplateItem, LayoutTemplateItem, FormatTemplateItem } from ".";
-import { WithOptional } from "../../../utilities/types";
-import { ToolboxItem } from "../toolbox";
+import { WithOptional } from "../../../../utilities/types";
+import { ToolboxItem } from "../../toolbox";
 import { Format, Layout, Root, Widget } from "./components";
 
 const TemplateItemComponentMap: Record<TemplateItemType, Record<string, any>> = {

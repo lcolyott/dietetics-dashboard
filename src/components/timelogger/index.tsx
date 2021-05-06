@@ -39,6 +39,7 @@ interface TimeLoggerProps {
 
 };
 
+// TODO: Add pagination that allows movement across all weeks in a placement
 const TimeLogger: React.FunctionComponent<TimeLoggerProps> = (props) => {
     const classes = useStyles();
     const [weekIndex, setWeekIndex] = React.useState<number>(0);

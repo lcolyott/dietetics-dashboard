@@ -3,7 +3,7 @@ import clsx from "clsx";
 import React, { useEffect } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { FormatTemplateItem, LayoutTemplateItem, RootTemplateItem, TemplateItem, WidgetTemplateItem } from ".";
-import { WithOptional } from "../../../utilities/types";
+import { WithOptional } from "../../../../utilities/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     component: {

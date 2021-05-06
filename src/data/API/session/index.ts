@@ -21,7 +21,7 @@ async function signIn(args: UserSignInArgs): Promise<any> {
                     Name: "Test User",
                     Email: "TestUser@Email.com",
                     Phone: "xxx-xxx-xxxx",
-                    Role: "Admin"
+                    Role: "SuperAdmin"
                 }
 
                 return testUser;
